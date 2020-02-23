@@ -1,0 +1,68 @@
+<%- include('partials/header');%>
+
+<div class="container">
+    <h1>Nuevo Instrumento</h1>
+    <div class="row">
+        <!-- FORMULARIO NUEVO INSTRUMENTO -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/guardarInstrumento" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="nombre" placeholder="Nombre del intrumento" class="form-control">
+                        </div>                        
+                        <div class="form-group">
+                            <textarea name="descripcion" cols="30" placeholder="Descripción del instrumento" class="form-control"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <select name="categoria" class="form-control">
+                                <option value="0">Categoria ...</option>
+                                <option value="1">Categoria 1</option>
+                                <option value="2">Categoria 2</option>
+                                <option value="3">Categoria 2</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea name="objetivos" cols="30" placeholder="Objetivos de aprendizaje" class="form-control"></textarea>
+                        </div>
+                         
+                        <div class="form-group">
+                            <textarea name="proposito" cols="30" placeholder="Proposito del instrumento" class="form-control"></textarea>
+                        </div>
+                          
+                        <div class="form-group">
+                            <select name="t_Duracion" class="form-control">
+                                <option value="0">Tiempo de duración ...</option>
+                                <option value="1">10 min</option>
+                                <option value="2">20 min</option>
+                                <option value="3">30 min</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <select name="n_Dificultad" class="form-control">
+                                <option value="0">Nivel de dificultad ...</option>
+                                <option value="1">Fácil</option>
+                                <option value="2">Moderado</option>
+                                <option value="3">Díficil</option>
+                            </select>
+                        </div>
+                        
+                        <!--<button type="submit" class="btn btn-primary btn-block">Crear instrumento</button>-->
+                        <input type="submit" value="Crear Instrumento" class="btn btn-primary btn-block">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- FORMULARIO NUEVO INSTRUMENTO -->
+        <!-- POSIBLE LISTA DE INSTRUMENTOS -->
+        <div class="col-md-6">
+            
+        </div>
+        <!-- POSIBLE LISTA DE INSTRUMENTOS -->
+    </div>
+</div>
+
+<%- include('partials/footer');%>
