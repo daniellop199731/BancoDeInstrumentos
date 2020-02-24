@@ -1,5 +1,45 @@
 <%- include('partials/header');%>
 <div class="container">
-    <h1>Nueva Categoria</h1>
-<div>
+    <div class="row">
+        <!-- FORULARIO NUEVA CATEGORIA -->
+        <div class="col-md-5">
+                <h1>Nueva Categoria</h1>
+            <div class="card">
+                <div class="card-body">
+                    <form action="/guardarCategoria" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="nombre" placeholder="Nombre de la categoria" class="form-control" required>
+                        </div>                                                                       
+                        <!--<button type="submit" class="btn btn-primary btn-block">Crear instrumento</button>-->
+                        <input type="submit" value="Crear Categoria" class="btn btn-primary btn-block">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- FORULARIO NUEVA CATEGORIA -->
+        <!-- LISTA DE CATEGORIAS -->
+        <div class="col-md-7">
+            <h1>Categorias creadas</h1>           
+            <table class="table table-bordered table-hover">                        
+                <thead>
+                    <tr>
+                        <th>
+                            Nombre de la categoria
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = 0; i < categorias.length; i++){ %>
+                    <tr>
+                        <td>
+                            <%= categorias[i].nombre%>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <!-- LISTA DE CATEGORIAS -->
+    </div>
+</div>
 <%- include('partials/footer');%>
