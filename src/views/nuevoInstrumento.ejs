@@ -44,15 +44,15 @@
     <div class="row">
         <!-- FORMULARIO NUEVO INSTRUMENTO -->
         <div class="col-md-5">
-            <h1>Nuevo Instrumento</h1>            
+            <h2>Nuevo Instrumento</h2>            
             <div class="card">
                 <div class="card-body">
-                    <form action="/guardarInstrumento" method="POST" id="guardarInstrumento">
+                    <form action="/crearInstrumento" method="POST" id="crearInstrumento">
                         <div class="form-group">
                             <input type="text" name="nombre" placeholder="Nombre del intrumento" class="form-control" required>
                         </div>                        
                         <div class="form-group">
-                            <textarea name="descripcion" cols="30" placeholder="Descripción del instrumento" class="form-control" required></textarea>
+                            <textarea name="descripcion" cols="30" placeholder="Descripción del instrumento" class="form-control" title="Aqui puede añadir las reglas de la actividad." required></textarea>
                         </div>
                         
                         <div class="form-group">
@@ -105,7 +105,44 @@
         <!-- FORMULARIO NUEVO INSTRUMENTO -->
         <!-- POSIBLE LISTA DE INSTRUMENTOS -->
         <div class="col-md-7">
-            
+            <h2>Mis Instrumentos</h2>
+            <table class="table table-bordered table-hover">   
+                <thead>
+                    <tr>
+                        <th>
+                            N°
+                        </th>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            Descripción
+                        </th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = 0; i < instrumentos.length; i++) {%>
+                        <tr>
+                            <th>
+                                <%= i+1 %>
+                            </th>
+                            <td title="<%=instrumentos[i]._id%>">
+                                <%=instrumentos[i].nombre%>
+                            </td>
+                            <td>
+                                <%=instrumentos[i].descripcion%>
+                            </td>   
+                            <td>
+                                <form action="/editarInstrumento" method="POST">
+                                    <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">
+                                    <input type="submit" value="Editar" class="btn btn-info">
+                                </form>
+                            </td>                         
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>                     
         </div>
         <!-- POSIBLE LISTA DE INSTRUMENTOS -->
     </div>

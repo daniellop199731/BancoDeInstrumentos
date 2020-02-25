@@ -1,0 +1,69 @@
+<%- include('partials/header');%>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1>Editar Instrumento</h1>
+            <div class="card">
+                <div class="card-body">
+                    <form action="/actualizarInstrumento/<%=instrumento._id%>" method="POST" id="actualizarInstrumento">
+                        <div class="form-group">
+                            <input type="text" name="nombre" placeholder="Nombre del intrumento" class="form-control" value="<%=instrumento.nombre%>" required>
+                        </div>                        
+                        <div class="form-group">
+                            <textarea name="descripcion" cols="30" placeholder="Descripción del instrumento" class="form-control" title="Aqui puede añadir las reglas de la actividad." required><%=instrumento.descripcion%></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <select name="categoria" class="form-control"  required>
+                                <option value="">Categoria ...</option>
+                                <% for(var i = 0; i < categorias.length; i++){ %>
+                                    <% if(categorias[i].nombre == instrumento.categoria){%>
+                                    <option selected="true" value="<%=categorias[i].nombre%>"><%=categorias[i].nombre%></option>
+                                    <% } else {%>
+                                    <option value="<%=categorias[i].nombre%>"><%=categorias[i].nombre%></option>
+                                    <% } %>
+                                <% } %>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea name="objetivos" cols="30" placeholder="Objetivos de aprendizaje" class="form-control" required><%=instrumento.objetivos%></textarea>
+                        </div>
+                            
+                        <div class="form-group">
+                            <textarea name="proposito" cols="30" placeholder="Proposito del instrumento" class="form-control" required><%=instrumento.proposito%></textarea>
+                        </div>
+                            
+                        <div class="form-group">
+                            <select name="t_Duracion" class="form-control" required>
+                                <option value="">Tiempo de duración ...</option>
+                                <option value="1">10 min</option>
+                                <option value="2">20 min</option>
+                                <option value="3">30 min</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <select name="n_Dificultad" class="form-control" required>
+                                <option value="">Nivel de dificultad ...</option>
+                                <option value="1">Fácil</option>
+                                <option value="2">Moderado</option>
+                                <option value="3">Díficil</option>
+                            </select>
+                        </div>
+                                            
+                        <% if(categorias.length != 0){ %>                        
+                        <input type="submit" value="Actualizar Instrumento" class="btn btn-primary btn-block">
+                        <% }else{ %>
+                        <script type="text/javascript">
+                            alert('ADVERTENCIA: No es posible actualizar el instrumento, porque no hay categorias existentes.');
+                        </script>
+                        <input type="submit" value="Actualizar Instrumento" class="btn btn-primary btn-block" disabled>                        
+                        <% } %>
+                    </form>            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('partials/footer');%>

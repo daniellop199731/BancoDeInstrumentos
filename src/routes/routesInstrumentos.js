@@ -9,11 +9,11 @@ const Categoria = require('../models/categoria');
 
 router.get('/nuevoInstrumento', async (req, res) => {
     const categorias = await Categoria.find();
-    var continuar = true;
-    res.render('nuevoInstrumento', {categorias, continuar});
+    const instrumentos = await Instrumento.find();
+    res.render('nuevoInstrumento', {categorias, instrumentos});
 });
 
-router.post('/guardarInstrumento', async (req, res) => {
+router.post('/crearInstrumento', async (req, res) => {
     const {nombre, descripcion, categoria, objetivos, proposito, t_Duracion, n_Dificultad} = req.body;
     var continuar = true;
     if(nombre == ''){
@@ -40,13 +40,27 @@ router.post('/guardarInstrumento', async (req, res) => {
     if(continuar){
         const instrumento = new Instrumento(req.body);
         await instrumento.save();
-        const categorias = await Categoria.find();
-        res.render('nuevoInstrumento', {categorias});
+        res.redirect('/nuevoInstrumento');
     }else{
-        const categorias = await Categoria.find();
         console.log('Faltan Datos En El Formulario');
-        res.render('nuevoInstrumento', {categorias});        
+        res.redirect('/nuevoInstrumento');      
     }
+});
+
+router.post('/editarInstrumento', async (req, res) =>{
+    const id = req.body.idInst;
+    const instrumento = await Instrumento.findById(id);
+    console.log(instrumento.categoria);
+    
+    const categorias = await Categoria.find();
+    res.render('editarInstrumento', {categorias, instrumento});
+});
+
+router.post('/actualizarInstrumento/:id', async (req, res) => {
+    const {id} = req.params;
+    console.log(id);
+    await Instrumento.update({_id: id}, req.body)
+    res.redirect('/nuevoInstrumento');
 });
 
 module.exports = router;

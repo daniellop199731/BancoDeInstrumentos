@@ -9,7 +9,7 @@ router.get('/nuevaCategoria', async (req, res) => {
 });
 
 router.post('/guardarCategoria', async (req, res)=>{
-    const nombre = req.body;
+    const {nombre} = req.body;
     var continuar = true;
     if(nombre == ''){
         continuar = false;
@@ -17,14 +17,11 @@ router.post('/guardarCategoria', async (req, res)=>{
     if(continuar){
         const categoria = new Categoria(req.body);
         await categoria.save();
-        const categorias = await Categoria.find();
-        res.render('nuevaCategoria', {categorias});
-    }else{
-        const categorias = await Categoria.find();
+        res.redirect('/nuevaCategoria');
+    }else{        
         console.log('Faltan Datos En El Formulario');
-        res.render('nuevaCategoria', {categorias});
+        res.redirect('/nuevaCategoria');
     }
-    //res.send('Categoria insertada');
 });
 
 module.exports = router;

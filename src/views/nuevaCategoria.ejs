@@ -3,7 +3,7 @@
     <div class="row">
         <!-- FORULARIO NUEVA CATEGORIA -->
         <div class="col-md-5">
-                <h1>Nueva Categoria</h1>
+            <h2>Nueva Categoria</h2>
             <div class="card">
                 <div class="card-body">
                     <form action="/guardarCategoria" method="POST">
@@ -19,10 +19,13 @@
         <!-- FORULARIO NUEVA CATEGORIA -->
         <!-- LISTA DE CATEGORIAS -->
         <div class="col-md-7">
-            <h1>Categorias creadas</h1>           
+            <h2>Categorias creadas</h2>           
             <table class="table table-bordered table-hover">                        
                 <thead>
                     <tr>
+                        <th>
+                            N°
+                        </th>
                         <th>
                             Nombre de la categoria
                         </th>
@@ -31,6 +34,9 @@
                 <tbody>
                     <% for(var i = 0; i < categorias.length; i++){ %>
                     <tr>
+                        <th>
+                            <%= i+1 %>
+                        </th>
                         <td>
                             <%= categorias[i].nombre%>
                         </td>
