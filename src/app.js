@@ -14,7 +14,7 @@ const mongoose = require('mongoose'); //Conexion entre express y mongo db
 /////////////////////////////////////////////////////////////////////////////
 
 //Base de datos
-mongoose.connect('mongodb+srv://son25:sara2509@cluster0-n8xzm.mongodb.net/test?retryWrites=true&w=majority')
+mongoose.connect('mongodb://localhost/pruena-instrumentos')
     .then(db => console.log('DB connected'))
     .catch(err => console.log(err));
 
