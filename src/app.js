@@ -16,7 +16,7 @@ const mongoose = require('mongoose'); //Conexion entre express y mongo db
 //Base de datos
 mongoose.connect('mongodb://localhost/pruena-instrumentos')
     .then(db => console.log('DB connected'))
-    .catch(err => console.log(err));
+    .catch(err => console.log('ERROR ------> ' + err));
 
 //Importar rutas
 //app.use(require('./routes/index'));

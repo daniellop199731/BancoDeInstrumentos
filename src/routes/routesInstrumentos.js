@@ -6,11 +6,15 @@ const Instrumento = require('../models/instrumento');
 
 //Modelos auxiliares
 const Categoria = require('../models/categoria');
+const NivelDificultad = require('../models/nivel_dificultad');
+const TiempoDuracion = require('../models/tiempo_duracion');
 
 router.get('/nuevoInstrumento', async (req, res) => {
     const categorias = await Categoria.find();
     const instrumentos = await Instrumento.find();
-    res.render('nuevoInstrumento', {categorias, instrumentos});
+    const nivelesDificultad = await NivelDificultad.find();
+    const tiemposDuracion = await TiempoDuracion.find();
+    res.render('nuevoInstrumento', {categorias, instrumentos, nivelesDificultad, tiemposDuracion});
 });
 
 router.post('/crearInstrumento', async (req, res) => {
