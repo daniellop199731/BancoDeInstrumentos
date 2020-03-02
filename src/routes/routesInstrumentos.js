@@ -18,7 +18,7 @@ router.get('/nuevoInstrumento', async (req, res) => {
 });
 
 router.post('/crearInstrumento', async (req, res) => {
-    const {nombre, descripcion, categoria, objetivos, proposito, t_Duracion, n_Dificultad} = req.body;
+    const {nombre, descripcion, categoria, objetivos, proposito, t_Duracion, n_Dificultad, material, reglas, conceptos, numeroIntegrantes} = req.body;
     var continuar = true;
     if(nombre == ''){
         continuar = false;
@@ -41,6 +41,18 @@ router.post('/crearInstrumento', async (req, res) => {
     if(n_Dificultad.value == ''){
         continuar = false;
     }
+    if(material.value == ''){
+        continuar = false;
+    }
+    if(reglas.value == ''){
+        continuar = false;
+    }
+    if(conceptos.value == ''){
+        continuar = false;
+    }
+    if(numeroIntegrantes.value == ''){
+        continuar = false;
+    }
     if(continuar){
         const instrumento = new Instrumento(req.body);
         await instrumento.save();
@@ -54,10 +66,16 @@ router.post('/crearInstrumento', async (req, res) => {
 router.post('/editarInstrumento', async (req, res) =>{
     const id = req.body.idInst;
     const instrumento = await Instrumento.findById(id);
+
+    const tiempoduracion = await TiempoDuracion.findById(id);
+    const nivel_dificultad = await NivelDificultad.findById(id);
+
+
     console.log(instrumento.categoria);
+    console.log(instrumento.n_Dificultad);
     
     const categorias = await Categoria.find();
-    res.render('editarInstrumento', {categorias, instrumento});
+    res.render('editarInstrumento', {categorias, instrumento, tiempoduracion, nivel_dificultad});
 });
 
 router.post('/actualizarInstrumento/:id', async (req, res) => {

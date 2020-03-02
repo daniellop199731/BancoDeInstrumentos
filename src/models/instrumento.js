@@ -8,7 +8,11 @@ const InstrumentoSchema = new Schema({
     objetivos: String,
     proposito: String,
     t_Duracion: String,
-    n_Dificultad: String
+    n_Dificultad: String,
+    material: String,
+    reglas: String,
+    conceptos: String,
+    numeroIntegrantes: String
 });
 
 module.exports = mongoose.model('instrumentos',InstrumentoSchema);

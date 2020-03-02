@@ -30,7 +30,13 @@
         if(document.forms[0].n_Dificultad.value == 0){
             continuar = false;
             document.forms[0].n_Dificultad.style="border: 2px solid red;";
-        }        
+        }     
+        
+        if(document.forms[0].materiales.value == 0){
+            continuar = false;
+            document.forms[0].materiales.style="border: 2px solid red;";
+        }     
+
         if(continuar){
             document.forms[0].submit;
             alert('Información completa. Instrumento creado'); 
@@ -88,6 +94,18 @@
                                 <option value="<%=nivelesDificultad[i].nombre%>"><%=nivelesDificultad[i].nombre%></option>
                                 <%}%>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="material" cols="30" placeholder="Materiales del instrumento" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="reglas" cols="30" placeholder="Reglas" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="conceptos" cols="30" placeholder="Conceptos relacionados con el instrumento" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="numeroIntegrantes" cols="30" placeholder="Cantidad de participantes" class="form-control" required></textarea>
                         </div>
                                             
                         <% if(categorias.length != 0){ %>                        
