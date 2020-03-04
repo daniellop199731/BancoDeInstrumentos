@@ -1,0 +1,86 @@
+<%- include('partials/header'); %>
+
+<script type="text/javascript">
+    function fnConfirmarContrasena(){
+        fnDesmarcarCampos();
+        var continuar = true;
+        if(document.forms[0].correo.value == ""){
+            document.forms[0].correo.style="border: 2px solid red;"
+            continuar = false;
+        }
+        if(document.forms[0].contrasena.value == ''){
+            document.forms[0].contrasena.style="border: 2px solid red;"
+            continuar = false;
+        }
+        if(document.forms[0].contrasena2.value == ''){
+            document.forms[0].contrasena2.style="border: 2px solid red;"
+            continuar = false;
+        }
+        if((document.forms[0].contrasena.value != document.forms[0].contrasena2.value)){
+            alert('ADVERTENCIA: Las contraseñas no coinciden.');
+            document.forms[0].contrasena.style="border: 2px solid red;"
+            document.forms[0].contrasena2.style="border: 2px solid red;"
+            continuar = false;
+        }        
+        if(document.forms[0].nombre.value == ""){
+            document.forms[0].nombre.style="border: 2px solid red;"
+            continuar = false;
+        }
+        if(document.forms[0].apellido.value == ''){
+            document.forms[0].apellido.style="border: 2px solid red;"
+            continuar = false;
+        }               
+        if(document.forms[0].institucion.value == ''){
+            document.forms[0].institucion.style="border: 2px solid red;"
+            continuar = false;
+        }
+        if(continuar){
+            //alert('Usuario profesor autor, creado con exito');
+        }else{
+            alert('ADVERTENCIA: Los campos deben estar llenos correctamente.')
+        }
+    }
+
+    function fnDesmarcarCampos(){
+        document.forms[0].correo.style=""
+        document.forms[0].contrasena.style=""
+        document.forms[0].contrasena2.style=""
+        document.forms[0].nombre.style=""
+        document.forms[0].apellido.style=""
+        document.forms[0].institucion.style=""
+    }
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1></h1>
+            <div class="card">
+                <div class="card-body">
+                    <form action="/crearProfesor" method="POST">
+                        <div class="form-group">
+                            <input type="email" name="correo" value="" placeholder="Correo electronico" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="contrasena" value="" placeholder="Contraseña" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                                <input type="password" name="contrasena2" placeholder="Confirma la contraseña" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                                <input type="text" name="nombre" placeholder="Nombres" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                                <input type="text" name="apellido" placeholder="Apellidos" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="institucion" placeholder="Institucion educativa" class="form-control" required>
+                        </div>                        
+                        <input type="submit" value="Registrar" class="btn btn-primary btn-block" onclick="fnConfirmarContrasena()">                                                                           
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('partials/footer'); %>
