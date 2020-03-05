@@ -97,6 +97,18 @@ router.post('/crearInstrumento', async (req, res) => {
 });
 
 router.post('/editarInstrumento', async (req, res) =>{
+
+    //APLICA SESION
+    const sesionActual = await Sesion.find().limit(1);
+    var haySesion = false;
+    var profesor = null;
+    if(sesionActual.length == 1){
+        console.log(sesionActual[0].correo);
+        profesor = await Profesor.find({correo: sesionActual[0].correo});
+        console.log(profesor);
+        haySesion = true;
+    } 
+    
     const id = req.body.idInst;
     const instrumento = await Instrumento.findById(id);
 
@@ -108,7 +120,7 @@ router.post('/editarInstrumento', async (req, res) =>{
     console.log(instrumento.n_Dificultad);
     
     const categorias = await Categoria.find();
-    res.render('editarInstrumento', {categorias, instrumento, tiempoduracion, nivel_dificultad});
+    res.render('editarInstrumento', {categorias, instrumento, tiempoduracion, nivel_dificultad, profesor});
 });
 
 router.post('/actualizarInstrumento/:id', async (req, res) => {
