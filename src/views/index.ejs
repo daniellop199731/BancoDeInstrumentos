@@ -1,8 +1,75 @@
 
 <%- include('partials/header');%>
 
+    <%if(profesor != null){%>
+        <script>
+            fnSiHaySesion();
+        </script>
+    <%}else{%>
+        <script>
+            fnNoHaySesion();
+        </script>
+    <%}%>
+
     <div class="container">
         <p>El objetivo de esta aplicación es centralizar los instrumentos pedagógicos o actividades lúdicas que utilizan los docentes en diferentes cursos. Esto permitirá que un docente pueda consultar un instrumento ya creado para incorporarlo en sus clases o diseñar un instrumento nuevo para un temática en particular.</p>
+    </div>
+
+    <div class="container">
+        
+        <% if(categorias.length > 0){ %>
+        <form action="/consultarInstrumentos" method="POST">
+            <h2>Busque de instrumentos por categoria</h2>
+            <div class="row">
+                <div class="col-md-8">
+                    <select name="categoria" class="form-control" onchange="javascript: document.forms[0].submit" required>
+                            <option value="">Categoria ...</option>
+                            <% for(var i = 0; i < categorias.length; i++){ %>
+                            <option value="<%=categorias[i].nombre%>"><%=categorias[i].nombre%></option>
+                            <% } %>   
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="submit" value="Buscar" class="btn btn-primary btn-block">
+                </div>
+            </div>
+        </form>            
+        <% } %>
+        <br>
+        <% if(instrumentos != null){ %>
+        
+            <table class="table table-bordered table-hover">   
+                <thead>
+                    <tr>
+                        <th>
+                            N°
+                        </th>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            Descripción
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = 0; i < instrumentos.length; i++) {%>
+                        <tr>
+                            <th>
+                                <%= i+1 %>
+                            </th>
+                            <td title="<%=instrumentos[i]._id%>">
+                                <%=instrumentos[i].nombre%>
+                            </td>
+                            <td>
+                                <%=instrumentos[i].descripcion%>
+                            </td>                         
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>    
+
+        <% } %>
     </div>
 
 <%- include('partials/footer');%>

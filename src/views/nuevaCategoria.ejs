@@ -1,4 +1,15 @@
 <%- include('partials/header');%>
+
+    <%if(profesor != null){%>
+        <script>
+            fnSiHaySesion();
+        </script>
+    <%}else{%>
+        <script>
+            fnNoHaySesion();
+        </script>
+    <%}%>
+    
 <div class="container">
     <div class="row">
         <!-- FORULARIO NUEVA CATEGORIA -->

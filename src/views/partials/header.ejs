@@ -7,6 +7,25 @@
     <title>Banco de instrumentos</title>
     <!-- Boostrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script type="text/javascript">
+        function fnNoHaySesion(){
+            document.getElementById('instrumento').style.display = 'none';
+            document.getElementById('categoria').style.display = 'none';
+            document.getElementById('inicioSesion').style.display = 'block';
+            document.getElementById('salirSesion').style.display = 'none';
+            document.getElementById('registrarse').style.display = 'block';
+        }
+
+        function fnSiHaySesion(){
+            document.getElementById('instrumento').style.display = 'block';
+            document.getElementById('categoria').style.display = 'block';
+            document.getElementById('inicioSesion').style.display = 'none';
+            document.getElementById('salirSesion').style.display = 'block';
+            document.getElementById('registrarse').style.display = 'none';
+        }
+    </script>
+
 </head>
 <body>
 
@@ -14,16 +33,22 @@
         <a href="/" class="navbar-brand">Banco de instrumentos</a>
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <div id="instrumento" class="col-md-6">
                     <a href="/nuevoInstrumento" class="navbar-brand">Instrumentos</a>
                 </div>
-                <div class="col-md-6">
+                <div id="categoria" class="col-md-6">
                         <a href="/nuevaCategoria" class="navbar-brand">Categorias</a>
                 </div>
             </div>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
+                <li id="inicioSesion" class="nav-item active">
+                        <a class="nav-link" href="/login">Inicio sesion</a>
+                </li>     
+                <li id="registrarse" class="nav-item active">
                     <a class="nav-link" href="/nuevoProfesor">Registrarse</a>
+                </li> 
+                <li id="salirSesion" class="nav-item active">
+                    <a class="nav-link" href="/salirSesion">Salir de la sesion</a>
                 </li>                
             </ul>
         </div>

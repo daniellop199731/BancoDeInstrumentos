@@ -1,10 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
+const Sesion = require('../models/sesion');
 const Profesor = require('../models/profesor');
 
-router.get('/nuevoProfesor',  (req, res) => {
-    res.render('nuevoProfesor');
+router.get('/nuevoProfesor',  async (req, res) => {
+
+    const sesionActual = await Sesion.find().limit(1);
+    var profesor = null;
+    if(sesionActual.length == 1){
+        console.log(sesionActual);
+        profesor = await Profesor.find({correo: sesionActual.correo});
+    }
+    res.render('nuevoProfesor', {profesor});
 });
 
 router.post('/crearProfesor', async (req, res) => {

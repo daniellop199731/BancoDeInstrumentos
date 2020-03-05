@@ -12,7 +12,8 @@ const InstrumentoSchema = new Schema({
     material: String,
     reglas: String,
     conceptos: String,
-    numeroIntegrantes: String
+    numeroIntegrantes: String,
+    correoAutor: String
 });
 
 module.exports = mongoose.model('instrumentos',InstrumentoSchema);

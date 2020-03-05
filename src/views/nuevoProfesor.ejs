@@ -1,5 +1,15 @@
 <%- include('partials/header'); %>
 
+    <%if(profesor != null){%>
+        <script>
+            fnSiHaySesion();
+        </script>
+    <%}else{%>
+        <script>
+            fnNoHaySesion();
+        </script>
+    <%}%>
+
 <script type="text/javascript">
     function fnConfirmarContrasena(){
         fnDesmarcarCampos();

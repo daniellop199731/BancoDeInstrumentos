@@ -8,16 +8,44 @@ const Instrumento = require('../models/instrumento');
 const Categoria = require('../models/categoria');
 const NivelDificultad = require('../models/nivel_dificultad');
 const TiempoDuracion = require('../models/tiempo_duracion');
+//Para control de sesion
+const Sesion = require('../models/sesion');
+const Profesor = require('../models/profesor');
 
 router.get('/nuevoInstrumento', async (req, res) => {
+
+    //APLICA SESION
+    const sesionActual = await Sesion.find().limit(1);
+    var haySesion = false;
+    var profesor = null;
+    if(sesionActual.length == 1){
+        console.log(sesionActual[0].correo);
+        profesor = await Profesor.find({correo: sesionActual[0].correo});
+        console.log(profesor);
+        haySesion = true;
+    }  
+    /* NO APLICA SESION
     const categorias = await Categoria.find();
     const instrumentos = await Instrumento.find();
     const nivelesDificultad = await NivelDificultad.find();
-    const tiemposDuracion = await TiempoDuracion.find();
-    res.render('nuevoInstrumento', {categorias, instrumentos, nivelesDificultad, tiemposDuracion});
+    const tiemposDuracion = await TiempoDuracion.find();    
+    res.render('nuevoInstrumento', {categorias, instrumentos, nivelesDificultad, tiemposDuracion,});
+    */
+    //APLICA SESION  
+    if(haySesion){
+        const categorias = await Categoria.find();
+        const instrumentos = await Instrumento.find({correoAutor: profesor[0].correo});
+        const nivelesDificultad = await NivelDificultad.find();
+        const tiemposDuracion = await TiempoDuracion.find();        
+        //res.render('index', {profesor});
+        res.render('nuevoInstrumento', {categorias, instrumentos, nivelesDificultad, tiemposDuracion, profesor});
+    }else{
+        res.render('index', {profesor});
+    }    
 });
 
 router.post('/crearInstrumento', async (req, res) => {
+    const sesionActual = await Sesion.find().limit(1);
     const {nombre, descripcion, categoria, objetivos, proposito, t_Duracion, n_Dificultad, material, reglas, conceptos, numeroIntegrantes} = req.body;
     var continuar = true;
     if(nombre == ''){
@@ -56,6 +84,11 @@ router.post('/crearInstrumento', async (req, res) => {
     if(continuar){
         const instrumento = new Instrumento(req.body);
         await instrumento.save();
+        console.log('Datos nuevo Instrumento:');
+        console.log(instrumento);
+        console.log('Datos nuevo sesion actual:');
+        console.log(sesionActual);
+        await Instrumento.updateOne({_id: instrumento._id}, {$set: {correoAutor: sesionActual[0].correo}});
         res.redirect('/nuevoInstrumento');
     }else{
         console.log('Faltan Datos En El Formulario');

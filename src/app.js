@@ -40,6 +40,7 @@ app.use(require('./routes/index'));
 app.use(require('./routes/routesInstrumentos'));
 app.use(require('./routes/routesCategorias'));
 app.use(require('./routes/routesProfesores'));
+app.use(require('./routes/routesSession'));
 
 //Fecha de arranque
 let now = new Date();
