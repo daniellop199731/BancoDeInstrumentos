@@ -130,4 +130,22 @@ router.post('/actualizarInstrumento/:id', async (req, res) => {
     res.redirect('/nuevoInstrumento');
 });
 
+router.get('/eliminarInstrumento', async (req, res) =>{
+    const id = req.query.idInst;
+    const instrumento = await Instrumento.deleteOne({_id:id});
+    res.redirect('/nuevoInstrumento');
+
+    //instrumento.findOneAndRemove({_id: req.params.id},function(error){
+
+      //  if(!error){
+      //      res.redirect('/nuevoInstrumento')
+      //  }else{
+      //      console.log(error)
+      //      res.redirect('/nuevoInstrumento')
+       // }
+    //})
+});
+
+
+
 module.exports = router;
