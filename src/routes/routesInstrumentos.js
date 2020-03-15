@@ -58,7 +58,7 @@ router.post('/crearInstrumento', async (req, res) => {
         continuar = false;
     }
     if(objetivos.value == ''){
-        continuar = false;
+        //continuar = false;
     }
     if(proposito.value == ''){
         continuar = false;
@@ -73,10 +73,10 @@ router.post('/crearInstrumento', async (req, res) => {
         continuar = false;
     }
     if(reglas.value == ''){
-        continuar = false;
+        //continuar = false;
     }
     if(conceptos.value == ''){
-        continuar = false;
+        //continuar = false;
     }
     if(numeroIntegrantes.value == ''){
         continuar = false;
