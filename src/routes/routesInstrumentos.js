@@ -58,7 +58,7 @@ router.post('/crearInstrumento', async (req, res) => {
         continuar = false;
     }
     if(objetivos.value == ''){
-        //continuar = false;
+        continuar = false;
     }
     if(proposito.value == ''){
         continuar = false;
@@ -73,16 +73,19 @@ router.post('/crearInstrumento', async (req, res) => {
         continuar = false;
     }
     if(reglas.value == ''){
-        //continuar = false;
+        continuar = false;
     }
     if(conceptos.value == ''){
-        //continuar = false;
+        continuar = false;
     }
     if(numeroIntegrantes.value == ''){
         continuar = false;
     }
+
     if(continuar){
+        
         const instrumento = new Instrumento(req.body);
+        instrumento.publicado = 0;
         await instrumento.save();
         console.log('Datos nuevo Instrumento:');
         console.log(instrumento);

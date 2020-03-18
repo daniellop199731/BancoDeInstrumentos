@@ -5,15 +5,16 @@ const InstrumentoSchema = new Schema({
     nombre: String,
     descripcion: String,
     categoria: String,
-    objetivos: Array,
+    objetivos: String,
     proposito: String,
     t_Duracion: String,
     n_Dificultad: String,
     material: String,
-    reglas: Array,
-    conceptos: Array,
+    reglas: String,
+    conceptos: String,
     numeroIntegrantes: String,
-    correoAutor: String
+    correoAutor: String,
+    publicado: Number
 });
 
 module.exports = mongoose.model('instrumentos',InstrumentoSchema);

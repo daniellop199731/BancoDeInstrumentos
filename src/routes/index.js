@@ -20,7 +20,6 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/consultarInstrumentos', async (req, res) =>{
-
     const sesionActual = await Sesion.find().limit(1);
     var profesor = null;
     if(sesionActual.length == 1){
@@ -30,8 +29,25 @@ router.post('/consultarInstrumentos', async (req, res) =>{
     }
     const {categoria} = req.body;
     const categorias = await Categoria.find();
-    const instrumentos = await Instrumento.find({categoria: categoria});
+    const instrumentos = await Instrumento.find({categoria: categoria, publicado:1});
     res.render('index', {profesor, categorias, instrumentos});
+    
+
 });
+
+
+router.get('/publicarInstrumento', async (req, res) => {
+
+     
+    
+    const id = req.query.idInst;
+    const instrumento = await Instrumento.findByIdAndUpdate({_id: id}, {publicado:1});
+
+   
+
+
+    res.redirect('/nuevoInstrumento')
+
+})
 
 module.exports = router;
