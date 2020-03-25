@@ -3,7 +3,7 @@ const router = express.Router();
 
 //MODELO PRINCIPAL DE DATOS
 const Instrumento = require('../models/instrumento');
-
+const consultar = require('../models/categoria');
 //Modelos auxiliares
 const Categoria = require('../models/categoria');
 const NivelDificultad = require('../models/nivel_dificultad');
@@ -11,6 +11,9 @@ const TiempoDuracion = require('../models/tiempo_duracion');
 //Para control de sesion
 const Sesion = require('../models/sesion');
 const Profesor = require('../models/profesor');
+
+//Borrar si no sirve
+//const instrumentos = require('../models/instrumento')
 
 router.get('/nuevoInstrumento', async (req, res) => {
 
@@ -47,6 +50,7 @@ router.get('/nuevoInstrumento', async (req, res) => {
 router.post('/crearInstrumento', async (req, res) => {
     const sesionActual = await Sesion.find().limit(1);
     const {nombre, descripcion, categoria, objetivos, proposito, t_Duracion, n_Dificultad, material, reglas, conceptos, numeroIntegrantes} = req.body;
+    console.log(req.body)
     var continuar = true;
     if(nombre == ''){
         continuar = false;
@@ -81,11 +85,8 @@ router.post('/crearInstrumento', async (req, res) => {
     if(numeroIntegrantes.value == ''){
         continuar = false;
     }
-
     if(continuar){
-        
         const instrumento = new Instrumento(req.body);
-        instrumento.publicado = 0;
         await instrumento.save();
         console.log('Datos nuevo Instrumento:');
         console.log(instrumento);
@@ -126,10 +127,10 @@ router.post('/editarInstrumento', async (req, res) =>{
     res.render('editarInstrumento', {categorias, instrumento, tiempoduracion, nivel_dificultad, profesor});
 });
 
-router.post('/actualizarInstrumento/:id', async (req, res) => {
+router.get('/actualizarInstrumento/:id', async (req, res) => {
     const {id} = req.params;
     console.log(id);
-    await Instrumento.update({_id: id}, req.body)
+    await Instrumento.update({_id: id}, req.query)
     res.redirect('/nuevoInstrumento');
 });
 
@@ -149,6 +150,20 @@ router.get('/eliminarInstrumento', async (req, res) =>{
     //})
 });
 
+/*router.post('/crearInstrumento', async (req, res) => {
+    const instrumento = new instrumentos({
+        content: req.body.content
 
+    });
+
+    try {
+        await instrumento.save();
+        res.redirect('/nuevoInstrumento');
+
+    } catch (err){
+        res.redirect('/nuevoInstrumento');
+    }
+
+});*/
 
 module.exports = router;

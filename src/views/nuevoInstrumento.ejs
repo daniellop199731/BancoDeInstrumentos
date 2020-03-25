@@ -54,24 +54,102 @@
             alert('Faltan campos por llenar.');           
         }
     }
+
+    /*var objetivos  = [];
+    var reglas = [];
+    var conceptos = [];
+
+    function fnAgregar(listaStr, elemento){
+
+        if(elemento == ""){
+            alert("El objetivo esta vacío.");
+            return;
+        }
+
+        var lista = [];
+        switch (listaStr) {
+            case 'objetivos':
+                objetivos.push(elemento);    
+                document.getElementById('itemObjetivo').value = "";         
+                break;
+            case 'reglas':
+                reglas.push(elemento);
+                document.getElementById('itemRegla').value = "";
+                break;
+            case 'conceptos':
+                conceptos.push(elemento);
+                document.getElementById('itemConcepto').value = "";
+                break;            
+            default:
+                return;
+        }        
+        fnMostrarLista(listaStr);          
+    }
+
+    function fnQuitarUno(listaStr, index){
+        switch (listaStr) {
+            case 'objetivos':
+                objetivos.splite(index, 1);   
+                break;
+            case 'reglas':
+                reglas.splite(index, 1);                  
+                break;
+            case 'conceptos':
+                conceptos.splite(index, 1);                  
+                break;            
+            default:
+                return;
+        }
+        fnMostrarLista(listaStr);
+    }
+
+    function fnMostrarLista(listaStr){
+        var data = ''
+        var lista = [];
+        switch (listaStr) {
+            case 'objetivos':
+                lista = objetivos
+                break;
+            case 'reglas':
+                lista = reglas                
+                break;
+            case 'conceptos':
+                lista = conceptos
+                break;            
+            default:
+                return;
+        }        
+
+        for (var i = 0; i < lista.length; i++){
+        data += '<tr>'
+        data += "<td>"+lista[i]+"</td>"
+        data += "<td><button class='btn btn-danger btn-block' onclick='fnQuitarUno("+listaStr+","+i+")'>Eliminar</button></td>"
+        data += '</tr>'
+        }
+        document.getElementById(listaStr).innerHTML = data
+    }  */  
 </script>
 
 <div class="container">
     <div class="row">
         <!-- FORMULARIO NUEVO INSTRUMENTO -->
-        <div class="col-md-5">
+          <!-- FORMULARIO NUEVO INSTRUMENTO -->
+          <div class="col-md-5">
             <h2>Nuevo Instrumento</h2>            
             <div class="card">
                 <div class="card-body">
                     <form action="/crearInstrumento" method="POST" id="crearInstrumento">
                         <div class="form-group">
+                            <h3>Nombre del instrumento</h3>
                             <input type="text" name="nombre" placeholder="Nombre del intrumento" class="form-control" required>
                         </div>                        
                         <div class="form-group">
+                            <h3>Descripción</h3>
                             <textarea name="descripcion" cols="30" placeholder="Descripción del instrumento" class="form-control" title="Aqui puede añadir las reglas de la actividad." required></textarea>
                         </div>
                         
                         <div class="form-group">
+                            <h3>Categoría</h3>
                             <select name="categoria" class="form-control" required>
                                 <option value="">Categoria ...</option>
                                 <% for(var i = 0; i < categorias.length; i++){ %>
@@ -81,14 +159,36 @@
                         </div>
                         
                         <div class="form-group">
-                            <textarea name="objetivos" cols="30" placeholder="Objetivos de aprendizaje" class="form-control" required></textarea>
+                            <h3>Objetivos</h3>
+                            <textarea name="objetivos" cols="30" placeholder="Objetivos de aprendizaje" class="form-control" required></textarea>                  
+                            <!--<div class="card">
+                                <div class="body-card">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <input type="text" id="itemObjetivo" class="form-control" placeholder="Objetivo">
+                                                </th>
+                                                <th>
+                                                    <button class="btn btn-success btn-block" onclick="fnAgregar('objetivos', document.getElementById('itemObjetivo').value)">Añadir</button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="objetivos">
+                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>-->                        
                         </div>
                          
                         <div class="form-group">
+                            <h3>Propósito</h3>
                             <textarea name="proposito" cols="30" placeholder="Proposito del instrumento" class="form-control" required></textarea>
                         </div>
                           
                         <div class="form-group">
+                            <h3>Tiempo de duración</h3>
                             <select name="t_Duracion" class="form-control" required>
                                 <option value="">Tiempo de duración ...</option>
                                 <% for(var i = 0; i < tiemposDuracion.length; i++){ %>
@@ -98,6 +198,7 @@
                         </div>
                         
                         <div class="form-group">
+                            <h3>Nivel de dificultad</h3>
                             <select name="n_Dificultad" class="form-control" required>
                                 <option value="">Nivel de dificultad ...</option>
                                 <% for(var i = 0; i < nivelesDificultad.length; i++){ %>
@@ -106,15 +207,57 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <h3>Materiales</h3>
                             <textarea name="material" cols="30" placeholder="Materiales del instrumento" class="form-control" required></textarea>
                         </div>
                         <div class="form-group">
-                            <textarea name="reglas" cols="30" placeholder="Reglas" class="form-control" required></textarea>
-                        </div>
+                            <h3>Reglas</h3>
+                        <textarea name="reglas" cols="30" placeholder="Reglas" class="form-control" required></textarea>
+                        <!--<div class="card">
+                            <div class="body-card">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="text" id="itemRegla" class="form-control" placeholder="Regla">
+                                            </th>
+                                            <th>
+                                                <button class="btn btn-success btn-block" onclick="fnAgregar('reglas', document.getElementById('itemRegla').value)">Añadir</button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reglas">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>   --> 
+                      </div>
                         <div class="form-group">
+                            <h3>Conceptos</h3>
                             <textarea name="conceptos" cols="30" placeholder="Conceptos relacionados con el instrumento" class="form-control" required></textarea>
+                            <!--<div class="card">
+                                <div class="body-card">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <input type="text" id="itemConcepto" class="form-control" placeholder="Concepto">
+                                                </th>
+                                                <th>
+                                                    <button class="btn btn-success btn-block" onclick="fnAgregar('conceptos', document.getElementById('itemConcepto').value)">Añadir</button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="conceptos">
+                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>  --> 
                         </div>
                         <div class="form-group">
+                            <h3>Cantidad de integrantes</h3>
                             <textarea name="numeroIntegrantes" cols="30" placeholder="Cantidad de participantes" class="form-control" required></textarea>
                         </div>
                                             
@@ -129,7 +272,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div
         <!-- FORMULARIO NUEVO INSTRUMENTO -->
         <!-- POSIBLE LISTA DE INSTRUMENTOS -->
         <div class="col-md-7">

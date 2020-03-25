@@ -15,6 +15,7 @@
             document.getElementById('inicioSesion').style.display = 'block';
             document.getElementById('salirSesion').style.display = 'none';
             document.getElementById('registrarse').style.display = 'block';
+            document.getElementById('consultar').style.display = 'none'
         }
 
         function fnSiHaySesion(){
@@ -23,6 +24,7 @@
             document.getElementById('inicioSesion').style.display = 'none';
             document.getElementById('salirSesion').style.display = 'block';
             document.getElementById('registrarse').style.display = 'none';
+            document.getElementById('consultar').style.display = 'block'
         }
     </script>
 
@@ -33,11 +35,14 @@
         <a href="/" class="navbar-brand">Banco de instrumentos</a>
         <div class="container">
             <div class="row">
-                <div id="instrumento" class="col-md-6">
+                <div id="instrumento" class="col-md-4">
                     <a href="/nuevoInstrumento" class="navbar-brand">Instrumentos</a>
                 </div>
-                <div id="categoria" class="col-md-6">
+                <div id="categoria" class="col-md-4">
                         <a href="/nuevaCategoria" class="navbar-brand">Categorias</a>
+                </div>
+                <div id="consultar" class="col-md-4">
+                    <a href="/consultar" class="navbar-brand">Consultar</a>
                 </div>
             </div>
             <ul class="navbar-nav ml-auto">

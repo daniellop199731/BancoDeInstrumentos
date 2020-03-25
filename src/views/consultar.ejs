@@ -1,4 +1,3 @@
-
 <%- include('partials/header');%>
 
     <%if(profesor != null){%>
@@ -12,13 +11,9 @@
     <%}%>
 
     <div class="container">
-        <p>El objetivo de esta aplicación es centralizar los instrumentos pedagógicos o actividades lúdicas que utilizan los docentes en diferentes cursos. Esto permitirá que un docente pueda consultar un instrumento ya creado para incorporarlo en sus clases o diseñar un instrumento nuevo para un temática en particular.</p>
-    </div>
-
-    <div class="container">
         
         <% if(categorias.length > 0){ %>
-        <form action="/consultarInstrumentos" method="POST">
+        <form action="/consultar" method="POST">
             <h2>Búsqueda de instrumentos</h2>
             <div class="row">
                 
@@ -49,22 +44,34 @@
                             Nombre
                         </th>
                         <th>
-                            Objetivos
-                        </th>
-                        <th>
                             Descripción
-                        </th>
-                        <th>
-                            Propósito
                         </th>
                         <th>
                             Categoría
                         </th>
                         <th>
+                            Objetivos
+                        </th>
+                        <th>
+                            Propósito
+                        </th>
+                        <th>
                             Duración
                         </th>
                         <th>
-                            Nivel de dificultad
+                            Dificultad
+                        </th>
+                        <th>
+                            Materiales
+                        </th>
+                        <th>
+                            Reglas
+                        </th>
+                        <th>
+                            Copceptos
+                        </th>
+                        <th>
+                            Cantidad participantes
                         </th>
                     </tr>
                 </thead>
@@ -78,23 +85,35 @@
                                 <%=instrumentos[i].nombre%>
                             </td>
                             <td title="<%=instrumentos[i]._id%>">
-                                <%=instrumentos[i].objetivos%>
-                            </td>
-                            <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].descripcion%>
                             </td>
                             <td title="<%=instrumentos[i]._id%>">
-                                <%=instrumentos[i].proposito%>
+                                <%=instrumentos[i].categoria%>
+                            </td>
+                            <td title="<%=instrumentos[i]._id%>">
+                                <%=instrumentos[i].objetivos%>
                             </td> 
                             <td title="<%=instrumentos[i]._id%>">
-                                <%=instrumentos[i].categoria%>
+                                <%=instrumentos[i].proposito%>
                             </td> 
                             <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].t_Duracion%>
                             </td>
                             <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].n_Dificultad%>
-                            </td>                                                   
+                            </td>
+                            <td title="<%=instrumentos[i]._id%>">
+                                <%=instrumentos[i].material%>
+                            </td>
+                            <td title="<%=instrumentos[i]._id%>">
+                                <%=instrumentos[i].reglas%>
+                            </td>  
+                            <td title="<%=instrumentos[i]._id%>">
+                                <%=instrumentos[i].conceptos%>
+                            </td>
+                            <td title="<%=instrumentos[i]._id%>">
+                                <%=instrumentos[i].numeroIntegrantes%>
+                            </td>                                                 
                         </tr>
                     <% } %>
                 </tbody>

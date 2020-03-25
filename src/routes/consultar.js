@@ -6,7 +6,7 @@ const Profesor = require('../models/profesor');
 const Categoria = require('../models/categoria');
 const Instrumento = require('../models/instrumento');
 
-router.get('/', async (req, res) => {
+/*router.get('/consultar', async (req, res) => {
     const categorias = await Categoria.find();
     const sesionActual = await Sesion.find().limit(1);
     const instrumentos = null;
@@ -17,29 +17,8 @@ router.get('/', async (req, res) => {
         haySesion = true;
     }
     res.render('index', { profesor, categorias, instrumentos });
-});
-/*router.get('/consultarInstrumentos', async (req, res) => {
-    const sesionActual = await Sesion.find().limit(1);
-    var profesor = null;
-    if (sesionActual.length == 1) {
-        console.log(sesionActual);
-        profesor = await Profesor.find({ correo: sesionActual.correo });
-        haySesion = true;
-    }
-    const { categoria } = req.body;
-    var filtro = new RegExp(categoria, 'i');
-    const categorias = await Categoria.find();
-    const instrumentos = await Instrumento.find({
-        $or: [
-            { 'categoria': filtro },
-            { 'conceptos': filtro }
-        ], publicado: 1
-    });
-    res.render('index', { profesor, categorias, instrumentos });
-
 });*/
-
-router.post('/consultarInstrumentos', async (req, res) => {
+router.get('/consultar', async (req, res) => {
     const sesionActual = await Sesion.find().limit(1);
     var profesor = null;
     if (sesionActual.length == 1) {
@@ -56,23 +35,28 @@ router.post('/consultarInstrumentos', async (req, res) => {
             { 'conceptos': filtro }
         ], publicado: 1
     });
-    res.render('index', { profesor, categorias, instrumentos });
+    res.render('consultar', { profesor, categorias, instrumentos });
 
 });
 
+router.post('/consultar', async (req, res) => {
+    const sesionActual = await Sesion.find().limit(1);
+    var profesor = null;
+    if (sesionActual.length == 1) {
+        console.log(sesionActual);
+        profesor = await Profesor.find({ correo: sesionActual.correo });
+        haySesion = true;
+    }
+    const { categoria } = req.body;
+    var filtro = new RegExp(categoria, 'i');
+    const categorias = await Categoria.find();
+    const instrumentos = await Instrumento.find({
+        $or: [
+            { 'categoria': filtro },
+            { 'conceptos': filtro }
+        ], publicado: 1
+    });
+    res.render('consultar', { profesor, categorias, instrumentos });
 
-router.get('/publicarInstrumento', async (req, res) => {
-
-
-
-    const id = req.query.idInst;
-    const instrumento = await Instrumento.findByIdAndUpdate({ _id: id }, { publicado: 1 });
-
-
-
-
-    res.redirect('/nuevoInstrumento')
-
-})
-
+});
 module.exports = router;

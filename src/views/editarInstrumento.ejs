@@ -1,14 +1,13 @@
 <%- include('partials/header');%>
-
-    <%if(profesor != null){%>
-        <script>
-            fnSiHaySesion();
-        </script>
-    <%}else{%>
-        <script>
-            fnNoHaySesion();
-        </script>
-    <%}%>
+<%if(profesor != null){%>
+    <script>
+        fnSiHaySesion();
+    </script>
+<%}else{%>
+    <script>
+        fnNoHaySesion();
+    </script>
+<%}%>
 
 <div class="container">
     <div class="row">
@@ -16,15 +15,18 @@
             <h1>Editar Instrumento</h1>
             <div class="card">
                 <div class="card-body">
-                    <form action="/actualizarInstrumento/<%=instrumento._id%>" method="POST" id="actualizarInstrumento">
+                    <form action="/actualizarInstrumento/<%=instrumento._id%>" method="POST+" id="actualizarInstrumento">
                         <div class="form-group">
+                            <h3>Nombre del instrumento</h3>
                             <input type="text" name="nombre" placeholder="Nombre del intrumento" class="form-control" value="<%=instrumento.nombre%>" required>
                         </div>                        
                         <div class="form-group">
+                            <h3>Descripción</h3>
                             <textarea name="descripcion" cols="30" placeholder="Descripción del instrumento" class="form-control" title="Aqui puede añadir las reglas de la actividad." required><%=instrumento.descripcion%></textarea>
                         </div>
                         
                         <div class="form-group">
+                            <h3>Categoría</h3>
                             <select name="categoria" class="form-control"  required>
                                 <option value="">Categoria ...</option>
                                 <% for(var i = 0; i < categorias.length; i++){ %>
@@ -38,41 +40,54 @@
                         </div>
                         
                         <div class="form-group">
+                            <h3>Objetivos</h3>
                             <textarea name="objetivos" cols="30" placeholder="Objetivos de aprendizaje" class="form-control" required><%=instrumento.objetivos%></textarea>
                         </div>
                             
                         <div class="form-group">
+                            <h3>Propósito</h3>
                             <textarea name="proposito" cols="30" placeholder="Proposito del instrumento" class="form-control" required><%=instrumento.proposito%></textarea>
                         </div>
                             
-                        
                         <div class="form-group">
-                            <select name="categoria" class="form-control"  required>
-                                <option value="">Categoria ...</option>
-                                <% for(var i = 0; i < categorias.length; i++){ %>
-                                    <% if(categorias[i].nombre == instrumento.categoria){%>
-                                    <option selected="true" value="<%=categorias[i].nombre%>"><%=categorias[i].nombre%></option>
-                                    <% } else {%>
-                                    <option value="<%=categorias[i].nombre%>"><%=categorias[i].nombre%></option>
-                                    <% } %>
-                                <% } %>
-                            </select>
-                        </div>
-
-
-                        <div class="form-group">
-                            <select name="categoria" class="form-control"  required>
-                                <option value="">Categoria ...</option>
-                                <% for(var i = 0; i < categorias.length; i++){ %>
-                                    <% if(categorias[i].nombre == instrumento.categoria){%>
-                                    <option selected="true" value="<%=categorias[i].nombre%>"><%=categorias[i].nombre%></option>
-                                    <% } else {%>
-                                    <option value="<%=categorias[i].nombre%>"><%=categorias[i].nombre%></option>
-                                    <% } %>
-                                <% } %>
+                            <h3>Tiempo de duración</h3>
+                            <select name="t_Duracion" class="form-control" required>
+                                <option value="">Tiempo de duración ...</option>
+                                <option value="1">10 min</option>
+                                <option value="2">20 min</option>
+                                <option value="3">30 min</option>
                             </select>
                         </div>
                         
+                        <div class="form-group">
+                            <h3>Nivel de dificultad</h3>
+                            <select name="n_Dificultad" class="form-control" required>
+                                <option value="">Nivel de dificultad ...</option>
+                                <option value="1">Alto</option>
+                                <option value="2">Medio</option>
+                                <option value="3">Bajo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <h3>Materiales</h3>
+                            <textarea name="material" cols="30" placeholder="Materiales del instrumento" class="form-control" required><%=instrumento.material%></textarea>
+                        </div>
+                        <div class="form-group">
+                            <h3>Reglas</h3>
+                            <textarea name="reglas" cols="30" placeholder="Reglas del instrumento" class="form-control" required><%=instrumento.reglas%></textarea>
+                        </div>
+                        <div class="form-group">
+                            <h3>Conceptos</h3>
+                            <textarea name="conceptos" cols="30" placeholder="Conceptos del instrumento" class="form-control" required><%=instrumento.conceptos%></textarea>
+                        </div>
+                        <div class="form-group">
+                            <h3>Cantidad de integrantes</h3>
+                            <textarea name="numeroIntegrantes" cols="30" placeholder="Números de integrantes" class="form-control" required><%=instrumento.numeroIntegrantes%></textarea>
+                        </div>
+                        
+                        
+                    
                                             
                         <% if(categorias.length != 0){ %>                        
                         <input type="submit" value="Actualizar Instrumento" class="btn btn-primary btn-block">
