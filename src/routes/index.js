@@ -60,19 +60,4 @@ router.post('/consultarInstrumentos', async (req, res) => {
 
 });
 
-
-router.get('/publicarInstrumento', async (req, res) => {
-
-
-
-    const id = req.query.idInst;
-    const instrumento = await Instrumento.findByIdAndUpdate({ _id: id }, { publicado: 1 });
-
-
-
-
-    res.redirect('/nuevoInstrumento')
-
-})
-
 module.exports = router;

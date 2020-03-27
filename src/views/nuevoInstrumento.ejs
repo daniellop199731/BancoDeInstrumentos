@@ -289,7 +289,9 @@
                         <th>
                             Descripción
                         </th>
-                        <th>Operaciones</th>
+                        <th>
+                            Operaciones
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -316,8 +318,12 @@
                                 </form>
                                 <br>
                                 <form action="/publicarInstrumento" method="GET">
-                                    <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">
-                                    <input type="submit" value="Publicar" class="btn btn-success">
+                                    <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">                                                            
+                                    <% if(instrumentos[i].publicado == 1){ %>
+                                        <input type="submit" value="Retirar" class="btn btn-warning">
+                                    <% }else{ %>
+                                        <input type="submit" value="Publicar" class="btn btn-success">
+                                    <% } %>
                                 </form>
                             </td>                         
                         </tr>

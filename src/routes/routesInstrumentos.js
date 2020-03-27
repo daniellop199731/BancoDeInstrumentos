@@ -22,9 +22,7 @@ router.get('/nuevoInstrumento', async (req, res) => {
     var haySesion = false;
     var profesor = null;
     if(sesionActual.length == 1){
-        console.log(sesionActual[0].correo);
         profesor = await Profesor.find({correo: sesionActual[0].correo});
-        console.log(profesor);
         haySesion = true;
     }  
     /* NO APLICA SESION
@@ -50,7 +48,6 @@ router.get('/nuevoInstrumento', async (req, res) => {
 router.post('/crearInstrumento', async (req, res) => {
     const sesionActual = await Sesion.find().limit(1);
     const {nombre, descripcion, categoria, objetivos, proposito, t_Duracion, n_Dificultad, material, reglas, conceptos, numeroIntegrantes} = req.body;
-    console.log(req.body)
     var continuar = true;
     if(nombre == ''){
         continuar = false;
@@ -88,10 +85,6 @@ router.post('/crearInstrumento', async (req, res) => {
     if(continuar){
         const instrumento = new Instrumento(req.body);
         await instrumento.save();
-        console.log('Datos nuevo Instrumento:');
-        console.log(instrumento);
-        console.log('Datos nuevo sesion actual:');
-        console.log(sesionActual);
         await Instrumento.updateOne({_id: instrumento._id}, {$set: {correoAutor: sesionActual[0].correo}});
         res.redirect('/nuevoInstrumento');
     }else{
@@ -107,9 +100,7 @@ router.post('/editarInstrumento', async (req, res) =>{
     var haySesion = false;
     var profesor = null;
     if(sesionActual.length == 1){
-        console.log(sesionActual[0].correo);
         profesor = await Profesor.find({correo: sesionActual[0].correo});
-        console.log(profesor);
         haySesion = true;
     } 
     
@@ -118,10 +109,6 @@ router.post('/editarInstrumento', async (req, res) =>{
 
     const tiempoduracion = await TiempoDuracion.findById(id);
     const nivel_dificultad = await NivelDificultad.findById(id);
-
-
-    console.log(instrumento.categoria);
-    console.log(instrumento.n_Dificultad);
     
     const categorias = await Categoria.find();
     res.render('editarInstrumento', {categorias, instrumento, tiempoduracion, nivel_dificultad, profesor});
@@ -129,14 +116,13 @@ router.post('/editarInstrumento', async (req, res) =>{
 
 router.get('/actualizarInstrumento/:id', async (req, res) => {
     const {id} = req.params;
-    console.log(id);
     await Instrumento.update({_id: id}, req.query)
     res.redirect('/nuevoInstrumento');
 });
 
 router.get('/eliminarInstrumento', async (req, res) =>{
     const id = req.query.idInst;
-    const instrumento = await Instrumento.deleteOne({_id:id});
+    await Instrumento.deleteOne({_id:id});
     res.redirect('/nuevoInstrumento');
 
     //instrumento.findOneAndRemove({_id: req.params.id},function(error){
@@ -165,5 +151,17 @@ router.get('/eliminarInstrumento', async (req, res) =>{
     }
 
 });*/
+
+router.get('/publicarInstrumento', async (req, res) => {
+    const id = req.query.idInst;
+    const instrumento = await Instrumento.findById(id);
+    if(instrumento.publicado == 1){
+        await Instrumento.findByIdAndUpdate({ _id: id }, { publicado: 0 });
+    }else{
+        await Instrumento.findByIdAndUpdate({ _id: id }, { publicado: 1 });
+    }
+    res.redirect('/nuevoInstrumento')
+
+});
 
 module.exports = router;
