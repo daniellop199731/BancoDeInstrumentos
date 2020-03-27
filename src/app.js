@@ -4,6 +4,7 @@ const express = require('express'); //Se importa express
 const app = express(); //Inicializacion de express (apliccion de servidor)  
 const morgan = require('morgan'); //Info de peticiones por consola
 const mongoose = require('mongoose'); //Conexion entre express y mongo db
+
 //Asignacion del puerto
 //const port = 8080;
 
@@ -26,7 +27,7 @@ mongoose.connect('mongodb://localhost/pruena-instrumentos')
 //const intrumentoRoutes = require('./routes/routesInstrumentos');
 
 //Configuracion
-app.set('port', process.env.PORT || 8080); //Use puerto asignado por el SO, si no hay use el 8080
+app.set('port', process.env.PORT || 3000); //Use puerto asignado por el SO, si no hay use el 8080
 app.set('views', path.join(__dirname, 'views')); //Carpetas de las vistas
 app.set('view engine', 'ejs'); //Motor de plantillas
 

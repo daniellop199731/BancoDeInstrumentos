@@ -1,5 +1,19 @@
-const express = require('express');
-const router = express.Router();
+//ELEMENTOS REQUERIDOS
+const express = require('express'); //MODULO EXPRESS SERVIDOR
+const router = express.Router(); //MODULO PARA CREACION DE RURAS
+const path = require('path'); //MODULO PARA LA LA GESTION DE RURAS DE DIRECTORIOS
+const multer = require('multer'); //MODULO PARA LA GESTION DE ARCHIVOS
+const storage = multer.diskStorage({ // CONFIGURACION DEL PROCESO DE ARCHIVOS
+    destination: path.join(__dirname, '../public/arvhivos'),
+    filename: (req, file, cb) => {
+        cb(null, file.originalname)
+    }
+});
+const cargaArchivos = multer({ // CONFIGURACION DEL ALMACENAMIENTO DE ARCHIVOS
+    storage: storage,
+    dest: path.join(__dirname, '../public/arvhivos')
+}).single('archivo')
+//ELEMENTOS REQUERIDOS
 
 //MODELO PRINCIPAL DE DATOS
 const Instrumento = require('../models/instrumento');
@@ -8,6 +22,7 @@ const consultar = require('../models/categoria');
 const Categoria = require('../models/categoria');
 const NivelDificultad = require('../models/nivel_dificultad');
 const TiempoDuracion = require('../models/tiempo_duracion');
+const ArchivoInstrimentos = require('../models/archivosInstrumentos');
 //Para control de sesion
 const Sesion = require('../models/sesion');
 const Profesor = require('../models/profesor');
@@ -45,7 +60,7 @@ router.get('/nuevoInstrumento', async (req, res) => {
     }    
 });
 
-router.post('/crearInstrumento', async (req, res) => {
+router.post('/crearInstrumento', cargaArchivos, async (req, res) => {
     const sesionActual = await Sesion.find().limit(1);
     const {nombre, descripcion, categoria, objetivos, proposito, t_Duracion, n_Dificultad, material, reglas, conceptos, numeroIntegrantes} = req.body;
     var continuar = true;
@@ -86,6 +101,10 @@ router.post('/crearInstrumento', async (req, res) => {
         const instrumento = new Instrumento(req.body);
         await instrumento.save();
         await Instrumento.updateOne({_id: instrumento._id}, {$set: {correoAutor: sesionActual[0].correo}});
+        //var strNombreArchivo = req.file.originalname;
+        //var idInstrumento = instrumento.id;
+        //const archivoInstrumento = new ArchivoInstrimentos({strNombreArchivo});
+        //res.send(archivoInstrumento);
         res.redirect('/nuevoInstrumento');
     }else{
         console.log('Faltan Datos En El Formulario');
