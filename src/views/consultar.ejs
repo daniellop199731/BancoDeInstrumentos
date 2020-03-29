@@ -29,7 +29,8 @@
                 </div>
             </div>
             
-        </form>            
+        </form>    
+    </div>        
         <% } %>
         <br>
         <% if(instrumentos != null){ %>
@@ -79,7 +80,10 @@
                     <% for(var i = 0; i < instrumentos.length; i++) {%>
                         <tr>
                             <th>
-                                <%= i+1 %>
+                                <form action="/archivosInstrumento" method="POST">
+                                    <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">
+                                    <input type="submit" value="Archivos" class="btn btn-info">
+                                </form>
                             </th>
                             <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].nombre%>
@@ -113,14 +117,12 @@
                             </td>
                             <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].numeroIntegrantes%>
-                            </td>                                                 
+                            </td>                                               
                         </tr>
                     <% } %>
                 </tbody>
             </table>    
 
         <% } %>
-    </div>
-
 <%- include('partials/footer');%>
 

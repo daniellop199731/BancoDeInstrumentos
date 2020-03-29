@@ -1,6 +1,7 @@
 //ELEMENTOS REQUERIDOS
 const express = require('express'); //MODULO EXPRESS SERVIDOR
 const router = express.Router(); //MODULO PARA CREACION DE RURAS
+
 const path = require('path'); //MODULO PARA LA LA GESTION DE RURAS DE DIRECTORIOS
 const multer = require('multer'); //MODULO PARA LA GESTION DE ARCHIVOS
 const storage = multer.diskStorage({ // CONFIGURACION DEL PROCESO DE ARCHIVOS
@@ -13,6 +14,11 @@ const cargaArchivos = multer({ // CONFIGURACION DEL ALMACENAMIENTO DE ARCHIVOS
     storage: storage,
     dest: path.join(__dirname, '../public/arvhivos')
 }).single('archivo')
+
+const cargaArchivos2 = multer({ // CONFIGURACION DEL ALMACENAMIENTO DE ARCHIVOS
+    storage: storage,
+    dest: path.join(__dirname, '../public/arvhivos')
+}).single('archivo2')
 //ELEMENTOS REQUERIDOS
 
 //MODELO PRINCIPAL DE DATOS
@@ -101,10 +107,10 @@ router.post('/crearInstrumento', cargaArchivos, async (req, res) => {
         const instrumento = new Instrumento(req.body);
         await instrumento.save();
         await Instrumento.updateOne({_id: instrumento._id}, {$set: {correoAutor: sesionActual[0].correo}});
-        //var strNombreArchivo = req.file.originalname;
-        //var idInstrumento = instrumento.id;
-        //const archivoInstrumento = new ArchivoInstrimentos({strNombreArchivo});
-        //res.send(archivoInstrumento);
+        var nombreArchivo = req.file.originalname;
+        var idInstrumento = instrumento.id;
+        const archivoInstrumento = new ArchivoInstrimentos({idInstrumento, nombreArchivo});
+        await archivoInstrumento.save();
         res.redirect('/nuevoInstrumento');
     }else{
         console.log('Faltan Datos En El Formulario');
@@ -181,6 +187,95 @@ router.get('/publicarInstrumento', async (req, res) => {
     }
     res.redirect('/nuevoInstrumento')
 
+});
+
+/*router.get('/consultar', async (req, res) => {
+    const categorias = await Categoria.find();
+    const sesionActual = await Sesion.find().limit(1);
+    const instrumentos = null;
+    var profesor = null;
+    if (sesionActual.length == 1) {
+        console.log(sesionActual);
+        profesor = await Profesor.find({ correo: sesionActual.correo });
+        haySesion = true;
+    }
+    res.render('index', { profesor, categorias, instrumentos });
+});*/
+
+router.get('/consultar', async (req, res) => {
+    const sesionActual = await Sesion.find().limit(1);
+    var profesor = null;
+    if (sesionActual.length == 1) {
+        console.log(sesionActual);
+        profesor = await Profesor.find({ correo: sesionActual.correo });
+        haySesion = true;
+    }
+    const { categoria } = req.body;
+    var filtro = new RegExp(categoria, 'i');
+    const categorias = await Categoria.find();
+    const instrumentos = await Instrumento.find({
+        $or: [
+            { 'categoria': filtro },
+            { 'conceptos': filtro }
+        ], publicado: 1
+    });
+    res.render('consultar', { profesor, categorias, instrumentos });
+
+});
+
+router.post('/consultar', async (req, res) => {
+    const sesionActual = await Sesion.find().limit(1);
+    var profesor = null;
+    if (sesionActual.length == 1) {
+        console.log(sesionActual);
+        profesor = await Profesor.find({ correo: sesionActual.correo });
+        haySesion = true;
+    }
+    const { categoria } = req.body;
+    var filtro = new RegExp(categoria, 'i');
+    const categorias = await Categoria.find();
+    const instrumentos = await Instrumento.find({
+        $or: [
+            { 'categoria': filtro },
+            { 'conceptos': filtro }
+        ], publicado: 1
+    });
+    res.render('consultar', { profesor, categorias, instrumentos });
+});
+
+router.post('/archivosInstrumento', async (req, res)=>{
+    var profesor = null;
+    const idInst = req.body.idInst;
+    const sesionActual = await Sesion.find().limit(1);
+    const instrumento = await Instrumento.findById(idInst);
+    if (sesionActual.length == 1) {
+        //console.log(sesionActual);
+        profesor = await Profesor.find({ correo: sesionActual.correo });
+        haySesion = true;
+    }
+    
+    //console.log(idInst);
+    const archivosInstrumento = await ArchivoInstrimentos.find({idInstrumento: '5e8109f3ad2cec31cc174a63'});
+    //const archivosInstrumento = await ArchivoInstrimentos.find({idInstrumento: idInst+""});
+    //console.log(archivosInstrumento);
+    res.render('archivosInstrumento', {archivosInstrumento, idInst, profesor, instrumento});
+});
+
+router.post('/agregarArchivoInstrumento', cargaArchivos2, async (req, res)=>{    
+    
+    var idInstrumento = req.body.idInst;
+    console.log(idInstrumento);
+    var nombreArchivo = req.body.archivo2;
+    const archivoInstrumento = new ArchivoInstrimentos({idInstrumento, nombreArchivo});
+    await archivoInstrumento.save();
+    res.redirect('/consultar');
+    //res.send(archivoInstrumento);
+});
+
+router.post('/eliminarArchivoInstrumento', cargaArchivos2, async (req, res)=>{ 
+    const idArchivoInstrumento = req.body.idArchivoInstrumento;
+    await ArchivoInstrimentos.findByIdAndDelete(idArchivoInstrumento);
+    res.redirect('/consultar');
 });
 
 module.exports = router;
