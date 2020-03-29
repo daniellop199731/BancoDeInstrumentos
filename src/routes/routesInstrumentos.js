@@ -249,20 +249,14 @@ router.post('/archivosInstrumento', async (req, res)=>{
     const sesionActual = await Sesion.find().limit(1);
     const instrumento = await Instrumento.findById(idInst);
     if (sesionActual.length == 1) {
-        //console.log(sesionActual);
         profesor = await Profesor.find({ correo: sesionActual.correo });
         haySesion = true;
     }
-    
-    //console.log(idInst);
-    const archivosInstrumento = await ArchivoInstrimentos.find({idInstrumento: '5e8109f3ad2cec31cc174a63'});
-    //const archivosInstrumento = await ArchivoInstrimentos.find({idInstrumento: idInst+""});
-    //console.log(archivosInstrumento);
+    const archivosInstrumento = await ArchivoInstrimentos.find({idInstrumento: idInst});
     res.render('archivosInstrumento', {archivosInstrumento, idInst, profesor, instrumento});
 });
 
 router.post('/agregarArchivoInstrumento', cargaArchivos2, async (req, res)=>{    
-    
     var idInstrumento = req.body.idInst;
     console.log(idInstrumento);
     var nombreArchivo = req.body.archivo2;
@@ -272,7 +266,7 @@ router.post('/agregarArchivoInstrumento', cargaArchivos2, async (req, res)=>{
     //res.send(archivoInstrumento);
 });
 
-router.post('/eliminarArchivoInstrumento', cargaArchivos2, async (req, res)=>{ 
+router.post('/eliminarArchivoInstrumento', async (req, res)=>{ 
     const idArchivoInstrumento = req.body.idArchivoInstrumento;
     await ArchivoInstrimentos.findByIdAndDelete(idArchivoInstrumento);
     res.redirect('/consultar');
