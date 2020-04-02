@@ -12,8 +12,7 @@ const storage = multer.diskStorage({ // CONFIGURACION DEL PROCESO DE ARCHIVOS
 });
 const cargaArchivos = multer({ // CONFIGURACION DEL ALMACENAMIENTO DE ARCHIVOS
     storage: storage,
-    dest: path.join(__dirname, '../public/archivos'),
-    limits: {fileSize: 2000000}
+    dest: path.join(__dirname, '../public/archivos')
 }).single('archivo')
 
 //ELEMENTOS REQUERIDOS
