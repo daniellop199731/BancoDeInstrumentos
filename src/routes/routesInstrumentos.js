@@ -5,25 +5,21 @@ const router = express.Router(); //MODULO PARA CREACION DE RURAS
 const path = require('path'); //MODULO PARA LA LA GESTION DE RURAS DE DIRECTORIOS
 const multer = require('multer'); //MODULO PARA LA GESTION DE ARCHIVOS
 const storage = multer.diskStorage({ // CONFIGURACION DEL PROCESO DE ARCHIVOS
-    destination: path.join(__dirname, '../public/arvhivos'),
+    destination: path.join(__dirname, '../public/archivos'),
     filename: (req, file, cb) => {
-        cb(null, file.originalname)
+        cb(null, file.originalname.replace(/ /g, "_"));
     }
 });
 const cargaArchivos = multer({ // CONFIGURACION DEL ALMACENAMIENTO DE ARCHIVOS
     storage: storage,
-    dest: path.join(__dirname, '../public/arvhivos')
+    dest: path.join(__dirname, '../public/archivos'),
+    limits: {fileSize: 2000000}
 }).single('archivo')
 
-const cargaArchivos2 = multer({ // CONFIGURACION DEL ALMACENAMIENTO DE ARCHIVOS
-    storage: storage,
-    dest: path.join(__dirname, '../public/arvhivos')
-}).single('archivo2')
 //ELEMENTOS REQUERIDOS
 
 //MODELO PRINCIPAL DE DATOS
-const Instrumento = require('../models/instrumento');
-const consultar = require('../models/categoria');
+const Instrumento = require('../models/instrumento');;
 //Modelos auxiliares
 const Categoria = require('../models/categoria');
 const NivelDificultad = require('../models/nivel_dificultad');
@@ -107,7 +103,7 @@ router.post('/crearInstrumento', cargaArchivos, async (req, res) => {
         const instrumento = new Instrumento(req.body);
         await instrumento.save();
         await Instrumento.updateOne({_id: instrumento._id}, {$set: {correoAutor: sesionActual[0].correo}});
-        var nombreArchivo = req.file.originalname;
+        var nombreArchivo = req.file.originalnam.replace(/ /g, "_");
         var idInstrumento = instrumento.id;
         const archivoInstrumento = new ArchivoInstrimentos({idInstrumento, nombreArchivo});
         await archivoInstrumento.save();
@@ -244,6 +240,7 @@ router.post('/consultar', async (req, res) => {
 });
 
 router.post('/archivosInstrumento', async (req, res)=>{
+
     var profesor = null;
     const idInst = req.body.idInst;
     const sesionActual = await Sesion.find().limit(1);
@@ -256,14 +253,12 @@ router.post('/archivosInstrumento', async (req, res)=>{
     res.render('archivosInstrumento', {archivosInstrumento, idInst, profesor, instrumento});
 });
 
-router.post('/agregarArchivoInstrumento', cargaArchivos2, async (req, res)=>{    
+router.post('/agregarArchivoInstrumento', cargaArchivos, async (req, res)=>{    
     var idInstrumento = req.body.idInst;
-    console.log(idInstrumento);
-    var nombreArchivo = req.body.archivo2;
+    var nombreArchivo = req.file.originalname.replace(/ /g, "_");
     const archivoInstrumento = new ArchivoInstrimentos({idInstrumento, nombreArchivo});
     await archivoInstrumento.save();
     res.redirect('/consultar');
-    //res.send(archivoInstrumento);
 });
 
 router.post('/eliminarArchivoInstrumento', async (req, res)=>{ 

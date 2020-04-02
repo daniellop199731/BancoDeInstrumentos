@@ -43,6 +43,9 @@ app.use(require('./routes/routesCategorias'));
 app.use(require('./routes/routesProfesores'));
 app.use(require('./routes/routesSession'));
 
+//Archivos estaticos
+app.use(express.static( path.join(__dirname, 'public')));
+
 //Fecha de arranque
 let now = new Date();
 
