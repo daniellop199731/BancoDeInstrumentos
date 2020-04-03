@@ -102,7 +102,7 @@ router.post('/crearInstrumento', cargaArchivos, async (req, res) => {
         const instrumento = new Instrumento(req.body);
         await instrumento.save();
         await Instrumento.updateOne({_id: instrumento._id}, {$set: {correoAutor: sesionActual[0].correo}});
-        var nombreArchivo = req.file.originalnam.replace(/ /g, "_");
+        var nombreArchivo = req.file.originalname.replace(/ /g, "_");
         var idInstrumento = instrumento.id;
         const archivoInstrumento = new ArchivoInstrimentos({idInstrumento, nombreArchivo});
         await archivoInstrumento.save();
