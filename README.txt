@@ -1,3 +1,5 @@
+Para iniciar el proyecto deben correr npm install
+
 Crear repo github en vsc
 https://www.youtube.com/watch?v=bp5-mgzVey0
 
