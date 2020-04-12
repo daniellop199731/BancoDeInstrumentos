@@ -47,7 +47,7 @@ app.use(require('./routes/routesSession'));
 app.use(express.static( path.join(__dirname, 'public')));
 
 //Fecha de arranque
-let now = new Date();
+let now = new Date().toLocaleString();
 
 //Inicialisacion del servidor
 app.listen(app.get('port'), () =>{

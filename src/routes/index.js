@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     var profesor = null;
     if (sesionActual.length == 1) {
         console.log(sesionActual);
-        profesor = await Profesor.find({ correo: sesionActual.correo });
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
         haySesion = true;
     }
     res.render('index', { profesor, categorias, instrumentos });
@@ -44,7 +44,7 @@ router.post('/consultarInstrumentos', async (req, res) => {
     var profesor = null;
     if (sesionActual.length == 1) {
         console.log(sesionActual);
-        profesor = await Profesor.find({ correo: sesionActual.correo });
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
         haySesion = true;
     }
     const { categoria } = req.body;

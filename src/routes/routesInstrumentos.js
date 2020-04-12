@@ -15,18 +15,29 @@ const cargaArchivos = multer({ // CONFIGURACION DEL ALMACENAMIENTO DE ARCHIVOS
     dest: path.join(__dirname, '../public/archivos')
 }).single('archivo')
 
+
+
+
 //ELEMENTOS REQUERIDOS
 
 //MODELO PRINCIPAL DE DATOS
 const Instrumento = require('../models/instrumento');;
+const consultar = require('../models/categoria');
 //Modelos auxiliares
 const Categoria = require('../models/categoria');
 const NivelDificultad = require('../models/nivel_dificultad');
 const TiempoDuracion = require('../models/tiempo_duracion');
 const ArchivoInstrimentos = require('../models/archivosInstrumentos');
+const ComentarioInstrumento = require('../models/comentariosInstrumentos');
 //Para control de sesion
 const Sesion = require('../models/sesion');
 const Profesor = require('../models/profesor');
+//Para descargar un archivo
+const randomstring = require("randomstring");
+//const express = require('express');
+const pdf = require('html-pdf');
+const fs = require('fs');
+//const router = express.Router();
 
 //Borrar si no sirve
 //const instrumentos = require('../models/instrumento')
@@ -37,8 +48,8 @@ router.get('/nuevoInstrumento', async (req, res) => {
     const sesionActual = await Sesion.find().limit(1);
     var haySesion = false;
     var profesor = null;
-    if(sesionActual.length == 1){
-        profesor = await Profesor.find({correo: sesionActual[0].correo});
+    if(sesionActual.length > 0){
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
         haySesion = true;
     }  
     /* NO APLICA SESION
@@ -51,7 +62,7 @@ router.get('/nuevoInstrumento', async (req, res) => {
     //APLICA SESION  
     if(haySesion){
         const categorias = await Categoria.find();
-        const instrumentos = await Instrumento.find({correoAutor: profesor[0].correo});
+        const instrumentos = await Instrumento.find({ correoAutor: profesor[0].correo });
         const nivelesDificultad = await NivelDificultad.find();
         const tiemposDuracion = await TiempoDuracion.find();        
         //res.render('index', {profesor});
@@ -119,8 +130,8 @@ router.post('/editarInstrumento', async (req, res) =>{
     const sesionActual = await Sesion.find().limit(1);
     var haySesion = false;
     var profesor = null;
-    if(sesionActual.length == 1){
-        profesor = await Profesor.find({correo: sesionActual[0].correo});
+    if(sesionActual.length > 0){
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
         haySesion = true;
     } 
     
@@ -175,7 +186,7 @@ router.get('/eliminarInstrumento', async (req, res) =>{
 router.get('/publicarInstrumento', async (req, res) => {
     const id = req.query.idInst;
     const instrumento = await Instrumento.findById(id);
-    if(instrumento.publicado == 1){
+    if(instrumento.publicado > 0){
         await Instrumento.findByIdAndUpdate({ _id: id }, { publicado: 0 });
     }else{
         await Instrumento.findByIdAndUpdate({ _id: id }, { publicado: 1 });
@@ -200,9 +211,9 @@ router.get('/publicarInstrumento', async (req, res) => {
 router.get('/consultar', async (req, res) => {
     const sesionActual = await Sesion.find().limit(1);
     var profesor = null;
-    if (sesionActual.length == 1) {
+    if (sesionActual.length > 0) {
         console.log(sesionActual);
-        profesor = await Profesor.find({ correo: sesionActual.correo });
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
         haySesion = true;
     }
     const { categoria } = req.body;
@@ -214,6 +225,10 @@ router.get('/consultar', async (req, res) => {
             { 'conceptos': filtro }
         ], publicado: 1
     });
+    for (let i = 0; i < instrumentos.length; i++) {
+        instrumentos[i].base64 = await generarBase64(instrumentos[i]);
+        instrumentos[i].archivos = await obtenerArchivos(instrumentos[i]._id)
+    }
     res.render('consultar', { profesor, categorias, instrumentos });
 
 });
@@ -221,9 +236,9 @@ router.get('/consultar', async (req, res) => {
 router.post('/consultar', async (req, res) => {
     const sesionActual = await Sesion.find().limit(1);
     var profesor = null;
-    if (sesionActual.length == 1) {
+    if (sesionActual.length > 0) {
         console.log(sesionActual);
-        profesor = await Profesor.find({ correo: sesionActual.correo });
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
         haySesion = true;
     }
     const { categoria } = req.body;
@@ -235,7 +250,88 @@ router.post('/consultar', async (req, res) => {
             { 'conceptos': filtro }
         ], publicado: 1
     });
+    for (let i = 0; i < instrumentos.length; i++) {
+        instrumentos[i].base64 = await generarBase64(instrumentos[i]);
+        instrumentos[i].archivos = await obtenerArchivos(instrumentos[i]._id)
+    }
     res.render('consultar', { profesor, categorias, instrumentos });
+});
+
+function generarBase64(instrumento, callback) {
+    return new Promise(callback => {
+        var contenido = `
+        <h1>Instrumento</h1>
+        <p><b>Nombre</b>:<br> ${instrumento.nombre}
+        <p><b>Descripcion</b>:<br> ${instrumento.descripcion}
+        <p><b>Categoria</b>:<br> ${instrumento.categoria}
+        <p><b>Objetivos</b>:<br> ${instrumento.objetivos}
+        <p><b>Proposito</b>:<br> ${instrumento.proposito}
+        <p><b>Tiempo de duración</b>:<br> ${instrumento.t_Duracion}
+        <p><b>Nivel de dificultad</b>:<br> ${instrumento.n_Dificultad}
+        <p><b>Material</b>:<br> ${instrumento.material}
+        <p><b>Reglas</b>:<br> ${instrumento.reglas}
+        <p><b>Conceptos</b>:<br> ${instrumento.conceptos}
+        <p><b>Numero de integrantes</b>:<br> ${instrumento.numeroIntegrantes}
+        <p><b>Archivos adjuntos</b>:<br> ${instrumento.archivoInstrumento}
+        <p><b>Correo autor</b>:<br> ${instrumento.correoAutor}
+        <p><b>Publicado</b>:<br> ${instrumento.publicado > 0 ? "Si" : "No"}</p>`;
+
+        pdf.create(contenido).toBuffer(function (err, buffer) {
+            if (err) {
+                console.log("Ha ocurrido un error");
+                callback(null)
+            } else {
+                var respuesta = `data:application/pdf;base64,` + buffer.toString('base64');
+                callback(respuesta)
+            }
+        });
+    });
+}
+
+async function obtenerArchivos(idInst) {
+    const archivosInstrumento = await ArchivoInstrimentos.find({ idInstrumento: idInst });
+    console.log(idInst);
+    var respuesta = ''
+    for (let i = 0; i < archivosInstrumento.length; i++) {
+        var nombre = archivosInstrumento[i].nombreArchivo
+        var file = await fs.readFileSync(`src/public/archivos/${nombre}`);
+        respuesta = respuesta + `${nombre}|split|data:@file/file;base64,` + file.toString('base64') + "|name|";
+    }
+    
+    return respuesta
+}
+
+router.post('/agregarComentarioInstrumento', async (req, res) => {
+
+    const idInstrumento = req.body.idInst;
+    const comentario = req.body.comentario;
+
+    var profesor = null;
+    const sesionActual = await Sesion.find().limit(1);
+    const idInst = idInstrumento
+    const instrumento = await Instrumento.findById(idInst);
+    const autor = sesionActual[0].correo || "No establecido"
+    if (sesionActual.length > 0) {
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
+    }
+    let fecha = new Date().toLocaleString();
+    const comentarioInstrumento = new ComentarioInstrumento({ idInstrumento, comentario, autor, fecha });
+    await comentarioInstrumento.save();
+    const comentariosInstrumentos = await ComentarioInstrumento.find({ idInstrumento: idInst });
+    res.render('verComentarioInstrumento', { comentariosInstrumentos, idInst, profesor, instrumento });
+});
+
+router.post('/verComentarioInstrumento', async (req, res) => {
+    var profesor = null;
+    const idInst = req.body.idInst;
+    const sesionActual = await Sesion.find().limit(1);
+    const instrumento = await Instrumento.findById(idInst);
+    if (sesionActual.length > 0) {
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
+        haySesion = true;
+    }
+    const comentariosInstrumentos = await ComentarioInstrumento.find({ idInstrumento: idInst });
+    res.render('verComentarioInstrumento', { comentariosInstrumentos, idInst, profesor, instrumento });
 });
 
 router.post('/archivosInstrumento', async (req, res)=>{
@@ -244,8 +340,8 @@ router.post('/archivosInstrumento', async (req, res)=>{
     const idInst = req.body.idInst;
     const sesionActual = await Sesion.find().limit(1);
     const instrumento = await Instrumento.findById(idInst);
-    if (sesionActual.length == 1) {
-        profesor = await Profesor.find({ correo: sesionActual.correo });
+    if (sesionActual.length > 0) {
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });
         haySesion = true;
     }
     const archivosInstrumento = await ArchivoInstrimentos.find({idInstrumento: idInst});

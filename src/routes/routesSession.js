@@ -9,7 +9,7 @@ router.get('/login', async (req, res) =>{
     var profesor = null;
     if(sesionActual.length == 1){
         console.log(sesionActual);
-        profesor = await Profesor.find({correo: sesionActual.correo});
+        profesor = await Profesor.find({correo: sesionActual[0].correo});
     }
     res.render('session', {profesor});
 });

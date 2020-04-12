@@ -1,0 +1,58 @@
+<%- include('partials/header');%>
+
+<%if(profesor != null){%>
+<script>
+    fnSiHaySesion();
+</script>
+<%}else{%>
+<script>
+    fnNoHaySesion();
+</script>
+<%}%>
+
+    <% if(instrumento==null){%>
+<h4>instrumento no encontrado</h4>
+<% }else{ %>
+<div class="container">
+    <form action="/agregarComentarioInstrumento" method="POST">
+        <div class="form-group">
+            <h3>Agregar comentario</h3>
+            <input type="hidden" name="idInst" value="<%=idInst%>">
+            <textarea class="form-control" name="comentario" rows="3"></textarea>
+            <input type="submit" value="Hacer comentario" class="btn btn-primary">
+        </div>
+    </form>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <h5>Comentarios del instrumento <%=instrumento.nombre%></h4>
+                </th>
+                <th>
+                    <h5>Autor comentario</h4>
+                </th>
+                <th>
+                    <h5>Fecha comentario</h4>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <%for (var i=0; i < comentariosInstrumentos.length; i++){ %>
+            <tr>
+                <td>
+                    <%=comentariosInstrumentos[i].comentario%>
+                </td>
+                <td>
+                    <%=comentariosInstrumentos[i].autor%>
+                </td>
+                <td>
+                    <%=comentariosInstrumentos[i].fecha%>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+<% } %>
+
+<%- include('partials/footer');%>
