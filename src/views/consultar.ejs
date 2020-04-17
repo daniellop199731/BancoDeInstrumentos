@@ -9,7 +9,24 @@
             fnNoHaySesion();
         </script>
     <%}%>
-
+    <script type="text/javascript">
+    async function fnDescargarInstrumento(base64, archivos) {
+            let a = document.createElement('a')
+            a.href = base64
+            a.download = 'Instrumento.pdf'
+            a.click()
+            var archivos = archivos.split('|name|')
+            for (let i = 0; i < archivos.length; i++) {
+                if (archivos[i] != "") {
+                    var info = archivos[i].split('|split|')
+                    let b = document.createElement('a')
+                    b.href = info[1]
+                    b.download = info[0]
+                    b.click()
+                }
+            }
+        }
+    </script>
     <div class="container">
         
         <% if(categorias.length > 0){ %>
@@ -57,7 +74,7 @@
                             Propósito
                         </th>
                         <th>
-                            Duración
+                            Duración/Minutos
                         </th>
                         <th>
                             Dificultad
@@ -74,16 +91,22 @@
                         <th>
                             Cantidad participantes
                         </th>
+                        <th>
+                            Añadir comentarios
+                        </th>
+                        <th>
+                            Archivos adjuntos
+                        </th>
+                        <th>
+                            Descargar
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <% for(var i = 0; i < instrumentos.length; i++) {%>
                         <tr>
                             <th>
-                                <form action="/archivosInstrumento" method="POST">
-                                    <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">
-                                    <input type="submit" value="Archivos" class="btn btn-info">
-                                </form>
+                                <%= i+1 %>
                             </th>
                             <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].nombre%>
@@ -117,7 +140,23 @@
                             </td>
                             <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].numeroIntegrantes%>
-                            </td>                                               
+                            </td> 
+                            <th>
+                                <form action="/verComentarioInstrumento" method="POST">
+                                    <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">
+                                    <input type="submit" value="Ver comentarios" class="btn btn-info">
+                                </form>
+                            </th> 
+                            <th>
+                                <form action="/archivosInstrumento" method="POST">
+                                    <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">
+                                    <input type="submit" value="Archivos" class="btn btn-info">
+                                </form>
+                            </th> 
+                            <td title="<%=instrumentos[i]._id%>">
+                                <button class="btn btn-success btn-block"
+                                    onclick="fnDescargarInstrumento('<%=instrumentos[i].base64%>','<%=instrumentos[i].archivos%>')">Descargar</button>
+                            </td>                                                      
                         </tr>
                     <% } %>
                 </tbody>

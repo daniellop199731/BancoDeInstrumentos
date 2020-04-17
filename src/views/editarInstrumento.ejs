@@ -9,13 +9,93 @@
     </script>
 <%}%>
 
+
+<script type="text/javascript">
+
+    var objetivos = "<%-instrumento.objetivos-%>".split(",")
+    var reglas =  "<%-instrumento.reglas-%>".split(",")
+    var conceptos =  "<%-instrumento.conceptos-%>".split(",")
+
+    function fnAgregar(listaStr, elemento){
+
+        if(elemento == ""){
+            alert("El objetivo esta vacío.");
+            return;
+        }
+
+        var lista = [];
+        switch (listaStr) {
+            case 'objetivos':
+                objetivos.push(elemento);    
+                document.getElementById('itemObjetivo').value = "";         
+                break;
+            case 'reglas':
+                reglas.push(elemento);
+                document.getElementById('itemRegla').value = "";
+                break;
+            case 'conceptos':
+                conceptos.push(elemento);
+                document.getElementById('itemConcepto').value = "";
+                break;            
+            default:
+                return;
+        }        
+        fnMostrarLista(listaStr);          
+    }
+
+    function fnQuitarUno(listaStr, index){
+        
+        switch (listaStr) {
+            case 'objetivos':
+                objetivos.splice(index, 1);   
+                break;
+            case 'reglas':
+                reglas.splice(index, 1);                  
+                break;
+            case 'conceptos':
+                conceptos.splice(index, 1);                  
+                break;            
+            default:
+                return;
+        }
+        fnMostrarLista(listaStr);
+    }
+
+    function fnMostrarLista(listaStr){
+        var data = ''
+        var lista = [];
+        switch (listaStr) {
+            case 'objetivos':
+                lista = objetivos
+                break;
+            case 'reglas':
+                lista = reglas                
+                break;
+            case 'conceptos':
+                lista = conceptos
+                break;            
+            default:
+                return;
+        }        
+
+        for (var i = 0; i < lista.length; i++){
+            data += '<tr>'
+            data += "<td>"+lista[i]
+            data += `<input type="checkbox" checked hidden name="${listaStr}[]" id="chObjetivo" value="${lista[i]}" ></td>`
+            data += `<td><button type="button" class='btn btn-danger btn-block' onclick='fnQuitarUno("${listaStr}",${i})'>Eliminar</button></td>`
+            data += '</tr>'
+        }
+        document.getElementById("tabla"+listaStr).innerHTML = data
+    }  
+</script>
+
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h1>Editar Instrumento</h1>
             <div class="card">
                 <div class="card-body">
-                    <form action="/actualizarInstrumento/<%=instrumento._id%>" method="POST+" id="actualizarInstrumento">
+                    <form action="/actualizarInstrumento/<%=instrumento._id%>" method="GET" id="actualizarInstrumento">
                         <div class="form-group">
                             <h3>Nombre del instrumento</h3>
                             <input type="text" name="nombre" placeholder="Nombre del intrumento" class="form-control" value="<%=instrumento.nombre%>" required>
@@ -41,31 +121,64 @@
                         
                         <div class="form-group">
                             <h3>Objetivos</h3>
-                            <textarea name="objetivos" cols="30" placeholder="Objetivos de aprendizaje" class="form-control" required><%=instrumento.objetivos%></textarea>
-                        </div>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="text" id="itemObjetivo" name="itemObjetivo" class="form-control" placeholder="Nuevo objetivo">
+                                        </th>
+                                        <th>
+                                            <button type="button" class="btn btn-success btn-block" onclick='fnAgregar("objetivos", document.getElementById("itemObjetivo").value)'>Añadir</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaobjetivos">
+                                    <% for(var i = 0; i < instrumento.objetivos.length; i++){ %>
+                                        <tr>
+                                        <td> <%=instrumento.objetivos[i]%>
+                                            <input type="checkbox" checked hidden name="objetivos[]" id="chObjetivo" value="<%=instrumento.objetivos[i]%>" >
+                                        </td>
+                                            <td>
+                                                <button type="button" class='btn btn-danger btn-block' onclick='fnQuitarUno("objetivos","<%=i%>")'>Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div> 
                             
                         <div class="form-group">
-                            <h3>Propósito</h3>
-                            <textarea name="proposito" cols="30" placeholder="Proposito del instrumento" class="form-control" required><%=instrumento.proposito%></textarea>
+                            <h3>Propósitos</h3>
+                            <% for(var i = 0; i < propositos.length; i++){ %>
+                                <div>
+                                    <label>
+                                        <% if(instrumento.proposito.indexOf(propositos[i].nombre) != -1){%>
+                                            <input type="checkbox" checked name="proposito[]" id="chProposito" value="<%=propositos[i].nombre%>" >
+                                        <% } else {%>
+                                            <input type="checkbox" name="proposito[]" id="chProposito" value="<%=propositos[i].nombre%>" >
+                                        <% } %>
+                                        <%=propositos[i].nombre%>
+                                    </label>
+                                </div>
+                            <% } %>
                         </div>
                             
                         <div class="form-group">
                             <h3>Tiempo de duración</h3>
-                            <select name="t_Duracion" class="form-control" required>
-                                <option value="">Tiempo de duración ...</option>
-                                <option value="1">10 min</option>
-                                <option value="2">20 min</option>
-                                <option value="3">30 min</option>
-                            </select>
+                            <input type="number" name="t_Duracion" placeholder="Tiempo de duración (minutos) ..." class="form-control" value="<%=instrumento.t_Duracion%>" required>
                         </div>
                         
                         <div class="form-group">
                             <h3>Nivel de dificultad</h3>
                             <select name="n_Dificultad" class="form-control" required>
                                 <option value="">Nivel de dificultad ...</option>
-                                <option value="1">Alto</option>
-                                <option value="2">Medio</option>
-                                <option value="3">Bajo</option>
+                                <% for(var i = 0; i < nivelesDificultad.length; i++){ %>
+                                    <% if(categorias[i].nombre == instrumento.categoria){%>
+                                        <option selected value="<%=nivelesDificultad[i].nombre%>"><%=nivelesDificultad[i].nombre%></option>
+                                    <% } else {%>
+                                        <option value="<%=nivelesDificultad[i].nombre%>"><%=nivelesDificultad[i].nombre%></option>
+                                    <% } %>
+                                <%}%>
                             </select>
                         </div>
 
@@ -75,19 +188,62 @@
                         </div>
                         <div class="form-group">
                             <h3>Reglas</h3>
-                            <textarea name="reglas" cols="30" placeholder="Reglas del instrumento" class="form-control" required><%=instrumento.reglas%></textarea>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="text" id="itemRegla" class="form-control" placeholder="Nueva regla">
+                                        </th>
+                                        <th>
+                                            <button type="button" class="btn btn-success btn-block" onclick='fnAgregar("reglas", document.getElementById("itemRegla").value)''>Añadir</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablareglas">
+                                    <% for(var i = 0; i < instrumento.reglas.length; i++){ %>
+                                        <tr>
+                                        <td> <%=instrumento.reglas[i]%>
+                                            <input type="checkbox" checked hidden name="reglas[]" id="chObjetivo" value="<%=instrumento.objetivos[i]%>" >
+                                        </td>
+                                            <td>
+                                                <button type="button" class='btn btn-danger btn-block' onclick='fnQuitarUno("reglas","<%=i%>")'>Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="form-group">
                             <h3>Conceptos</h3>
-                            <textarea name="conceptos" cols="30" placeholder="Conceptos del instrumento" class="form-control" required><%=instrumento.conceptos%></textarea>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="text" id="itemConcepto" class="form-control" placeholder="Nuevo concepto">
+                                        </th>
+                                        <th>
+                                            <button type="button" class="btn btn-success btn-block" onclick="fnAgregar('conceptos', document.getElementById('itemConcepto').value)">Añadir</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaconceptos">
+                                    <% for(var i = 0; i < instrumento.conceptos.length; i++){ %>
+                                        <tr>
+                                        <td> <%=instrumento.conceptos[i]%>
+                                            <input type="checkbox" checked hidden name="conceptos[]" id="chObjetivo" value="<%=instrumento.objetivos[i]%>" >
+                                        </td>
+                                            <td>
+                                                <button type="button" class='btn btn-danger btn-block' onclick='fnQuitarUno("conceptos","<%=i%>")'>Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="form-group">
                             <h3>Cantidad de integrantes</h3>
-                            <textarea name="numeroIntegrantes" cols="30" placeholder="Números de integrantes" class="form-control" required><%=instrumento.numeroIntegrantes%></textarea>
+                            <input type="number" name="numeroIntegrantes" placeholder="Cantidad de participantes" class="form-control" value="<%=instrumento.numeroIntegrantes%>" required>
                         </div>
-                        
-                        
-                    
                                             
                         <% if(categorias.length != 0){ %>                        
                         <input type="submit" value="Actualizar Instrumento" class="btn btn-primary btn-block">
