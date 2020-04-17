@@ -17,14 +17,18 @@ router.get('/login', async (req, res) =>{
 router.post('/inicioSesion', async (req, res) =>{
     const {correo, contrasena} = req.body;
     const profesor = await Profesor.findOne({correo: correo});
-    if(profesor.contrasena == contrasena){
-        console.log('Iniciar sesion');
-        const sesion = new Sesion({correo});
-        await sesion.save();
-        res.redirect('/nuevoInstrumento');
+    if(profesor != null){
+        if(profesor.contrasena == contrasena){
+            console.log('Iniciar sesion');
+            const sesion = new Sesion({correo});
+            await sesion.save();
+            res.redirect('/nuevoInstrumento');
+        }else{
+            console.log('Contraseña incorrecta');
+            res.redirect('/login');
+        }
     }else{
-        console.log('Contraseña incorrecta');
-        res.redirect('/login');
+        res.redirect('/login');        
     }
 });
 
