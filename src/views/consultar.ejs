@@ -10,7 +10,7 @@
         </script>
     <%}%>
     <script type="text/javascript">
-        async function fnDescargarInstrumento(base64, archivos) {
+    async function fnDescargarInstrumento(base64, archivos) {
             let a = document.createElement('a')
             a.href = base64
             a.download = 'Instrumento.pdf'
@@ -74,7 +74,7 @@
                             Propósito
                         </th>
                         <th>
-                            Duración
+                            Duración/Minutos
                         </th>
                         <th>
                             Dificultad
@@ -89,20 +89,25 @@
                             Copceptos
                         </th>
                         <th>
-                            Visualizar comentarios
+                            Cantidad participantes
                         </th>
                         <th>
-                            Visualizar archivos
+                            Añadir comentarios
                         </th>
                         <th>
-                            Descargar instrumento
+                            Archivos adjuntos
+                        </th>
+                        <th>
+                            Descargar
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <% for(var i = 0; i < instrumentos.length; i++) {%>
                         <tr>
-                         
+                            <th>
+                                <%= i+1 %>
+                            </th>
                             <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].nombre%>
                             </td>
@@ -135,23 +140,23 @@
                             </td>
                             <td title="<%=instrumentos[i]._id%>">
                                 <%=instrumentos[i].numeroIntegrantes%>
-                            </td>  
+                            </td> 
                             <th>
                                 <form action="/verComentarioInstrumento" method="POST">
                                     <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">
                                     <input type="submit" value="Ver comentarios" class="btn btn-info">
                                 </form>
-                            </th>
+                            </th> 
                             <th>
                                 <form action="/archivosInstrumento" method="POST">
                                     <input type="hidden" name="idInst" value="<%=instrumentos[i]._id%>">
                                     <input type="submit" value="Archivos" class="btn btn-info">
                                 </form>
-                            </th>
+                            </th> 
                             <td title="<%=instrumentos[i]._id%>">
                                 <button class="btn btn-success btn-block"
                                     onclick="fnDescargarInstrumento('<%=instrumentos[i].base64%>','<%=instrumentos[i].archivos%>')">Descargar</button>
-                            </td>                                               
+                            </td>                                                      
                         </tr>
                     <% } %>
                 </tbody>

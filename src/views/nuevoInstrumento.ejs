@@ -55,7 +55,7 @@
         }
     }
 
-    /*var objetivos  = [];
+    var objetivos  = [];
     var reglas = [];
     var conceptos = [];
 
@@ -87,15 +87,18 @@
     }
 
     function fnQuitarUno(listaStr, index){
+        console.log(index);
+        console.log(listaStr);
+        
         switch (listaStr) {
             case 'objetivos':
-                objetivos.splite(index, 1);   
+                objetivos.splice(index, 1);   
                 break;
             case 'reglas':
-                reglas.splite(index, 1);                  
+                reglas.splice(index, 1);                  
                 break;
             case 'conceptos':
-                conceptos.splite(index, 1);                  
+                conceptos.splice(index, 1);                  
                 break;            
             default:
                 return;
@@ -121,20 +124,21 @@
         }        
 
         for (var i = 0; i < lista.length; i++){
-        data += '<tr>'
-        data += "<td>"+lista[i]+"</td>"
-        data += "<td><button class='btn btn-danger btn-block' onclick='fnQuitarUno("+listaStr+","+i+")'>Eliminar</button></td>"
-        data += '</tr>'
+            data += '<tr>'
+            data += "<td>"+lista[i]
+            data += `<input type="checkbox" checked hidden name="${listaStr}[]" id="chObjetivo" value="${lista[i]}" ></td>`
+            data += `<td><button type="button" class='btn btn-danger btn-block' onclick='fnQuitarUno("${listaStr}",${i})'>Eliminar</button></td>`
+            data += '</tr>'
         }
-        document.getElementById(listaStr).innerHTML = data
-    }  */  
+        document.getElementById("tabla"+listaStr).innerHTML = data
+    }  
 </script>
 
 <div class="container">
     <div class="row">
         <!-- FORMULARIO NUEVO INSTRUMENTO -->
-          <!-- FORMULARIO NUEVO INSTRUMENTO -->
-          <div class="col-md-5">
+        <!-- FORMULARIO NUEVO INSTRUMENTO -->
+        <div class="col-md-5">
             <h2>Nuevo Instrumento</h2>            
             <div class="card">
                 <div class="card-body">
@@ -160,44 +164,38 @@
                         </div>
                         
                         <div class="form-group">
-                            <h3>Objetivos</h3>
-                            <textarea name="objetivos" cols="30" placeholder="Objetivos de aprendizaje" class="form-control" required></textarea>
-                            
-                            <!--<div class="card">
-                                <div class="body-card">
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    <input type="text" id="itemObjetivo" class="form-control" placeholder="Objetivo">
-                                                </th>
-                                                <th>
-                                                    <button class="btn btn-success btn-block" onclick="fnAgregar('objetivos', document.getElementById('itemObjetivo').value)">Añadir</button>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="objetivos">
-                            
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>-->        
+                            <h3>Objetivos de aprendizaje</h3>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="text" id="itemObjetivo" name="itemObjetivo" class="form-control" placeholder="Nuevo objetivo">
+                                        </th>
+                                        <th>
+                                            <button type="button" class="btn btn-success btn-block" onclick='fnAgregar("objetivos", document.getElementById("itemObjetivo").value)'>Añadir</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaobjetivos">
+                                </tbody>
+                            </table>
+                        </div>
                         
-                        </div>
-                         
                         <div class="form-group">
-                            <h3>Propósito</h3>
-                            <textarea name="proposito" cols="30" placeholder="Proposito del instrumento" class="form-control" required></textarea>
+                            <h3>Propósitos</h3>
+                            <% for(var i = 0; i < propositos.length; i++){ %>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" name="proposito[]" id="chProposito" value="<%=propositos[i].nombre%>" >
+                                        <%=propositos[i].nombre%>
+                                    </label>
+                                </div>
+                            <% } %>
                         </div>
-                          
+                        
                         <div class="form-group">
                             <h3>Tiempo de duración</h3>
-                            <select name="t_Duracion" class="form-control" required>
-                                <option value="">Tiempo de duración ...</option>
-                                <% for(var i = 0; i < tiemposDuracion.length; i++){ %>
-                                <option value="<%=tiemposDuracion[i].nombre%>"><%=tiemposDuracion[i].nombre%></option>
-                                <%}%>
-                            </select>
+                            <input type="number" name="t_Duracion" placeholder="Tiempo de duración (minutos) ..." class="form-control" required>
                         </div>
                         
                         <div class="form-group">
@@ -215,57 +213,41 @@
                         </div>
                         <div class="form-group">
                             <h3>Reglas</h3>
-                        <textarea name="reglas" cols="30" placeholder="Reglas" class="form-control" required></textarea>
-                        
-                        <!--<div class="card">
-                            <div class="body-card">
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <input type="text" id="itemRegla" class="form-control" placeholder="Regla">
-                                            </th>
-                                            <th>
-                                                <button class="btn btn-success btn-block" onclick="fnAgregar('reglas', document.getElementById('itemRegla').value)">Añadir</button>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="reglas">
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>   -->
-                    
-                      </div>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="text" id="itemRegla" class="form-control" placeholder="Nueva regla">
+                                        </th>
+                                        <th>
+                                            <button type="button" class="btn btn-success btn-block" onclick='fnAgregar("reglas", document.getElementById("itemRegla").value)''>Añadir</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablareglas">
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="form-group">
                             <h3>Conceptos</h3>
-                            <textarea name="conceptos" cols="30" placeholder="Conceptos relacionados con el instrumento" class="form-control" required></textarea>
-                            
-                            <!--<div class="card">
-                                <div class="body-card">
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    <input type="text" id="itemConcepto" class="form-control" placeholder="Concepto">
-                                                </th>
-                                                <th>
-                                                    <button class="btn btn-success btn-block" onclick="fnAgregar('conceptos', document.getElementById('itemConcepto').value)">Añadir</button>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="conceptos">
-                            
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>  --> 
-                        
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="text" id="itemConcepto" class="form-control" placeholder="Nuevo concepto">
+                                        </th>
+                                        <th>
+                                            <button type="button" class="btn btn-success btn-block" onclick="fnAgregar('conceptos', document.getElementById('itemConcepto').value)">Añadir</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaconceptos">
+                                </tbody>
+                            </table>
                         </div>
                         <div class="form-group">
                             <h3>Cantidad de integrantes</h3>
-                            <textarea name="numeroIntegrantes" cols="30" placeholder="Cantidad de participantes" class="form-control" required></textarea>
+                            <input type="number" name="numeroIntegrantes" placeholder="Cantidad de participantes" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
