@@ -7,16 +7,41 @@ const Categoria = require('../models/categoria');
 const Instrumento = require('../models/instrumento');
 
 router.get('/', async (req, res) => {
+    const mensaje = null;
     const categorias = await Categoria.find();
     const sesionActual = await Sesion.find().limit(1);
     const instrumentos = null;
     var profesor = null;
     if (sesionActual.length == 1) {
         console.log(sesionActual);
-        profesor = await Profesor.find({ correo: sesionActual[0].correo });
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });        
+        if(profesor[0].esAdmin == 1){
+            console.log("es admin");
+        }else{
+            console.log("no es admin");
+        }
         haySesion = true;
     }
-    res.render('index', { profesor, categorias, instrumentos });
+    res.render('index', { profesor, categorias, instrumentos, mensaje });
+});
+
+router.get('/msg', async (req, res) => {
+    const mensaje = "Usuario profesor creado !"
+    const categorias = await Categoria.find();
+    const sesionActual = await Sesion.find().limit(1);
+    const instrumentos = null;
+    var profesor = null;
+    if (sesionActual.length == 1) {
+        console.log(sesionActual);
+        profesor = await Profesor.find({ correo: sesionActual[0].correo });        
+        if(profesor[0].esAdmin == 1){
+            console.log("es admin");
+        }else{
+            console.log("no es admin");
+        }
+        haySesion = true;
+    }
+    res.render('index', { profesor, categorias, instrumentos, mensaje });
 });
 /*router.get('/consultarInstrumentos', async (req, res) => {
     const sesionActual = await Sesion.find().limit(1);

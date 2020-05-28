@@ -44,6 +44,10 @@
             document.forms[0].institucion.style="border: 2px solid red;"
             continuar = false;
         }
+        if(document.forms[0].codAcceso.value == ''){
+            document.forms[0].codAcceso.style="border: 2px solid red;"
+            continuar = false;
+        }        
         if(continuar){
             //alert('Usuario profesor autor, creado con exito');
         }else{
@@ -52,16 +56,24 @@
     }
 
     function fnDesmarcarCampos(){
-        document.forms[0].correo.style=""
-        document.forms[0].contrasena.style=""
-        document.forms[0].contrasena2.style=""
-        document.forms[0].nombre.style=""
-        document.forms[0].apellido.style=""
-        document.forms[0].institucion.style=""
+        document.forms[0].correo.style="";
+        document.forms[0].contrasena.style="";
+        document.forms[0].contrasena2.style="";
+        document.forms[0].nombre.style="";
+        document.forms[0].apellido.style="";
+        document.forms[0].institucion.style="";
+        document.forms[0].codAcceso.style="";
     }
 </script>
 
 <div class="container">
+    <% if(mensaje != null) { %>
+        <div class="alert alert-success">
+            <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
+            <strong>¡Aviso!</strong><%=mensaje%>
+        </div>    
+        <%mensaje=null%>
+    <% } %>
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h1></h1>
@@ -85,7 +97,10 @@
                         </div>
                         <div class="form-group">
                             <input type="text" name="institucion" placeholder="Institucion educativa" class="form-control" required>
-                        </div>                        
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="codAcceso" placeholder="Codigo de Acceso" class="form-control" required>
+                        </div>                                                 
                         <input type="submit" value="Registrar" class="btn btn-primary btn-block" onclick="fnConfirmarContrasena()">                                                                           
                     </form>
                 </div>

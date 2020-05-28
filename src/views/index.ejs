@@ -11,6 +11,16 @@
         </script>
     <%}%>
 
+    <% if(mensaje != null) { %>
+        <div class="container">
+            <div class="alert alert-success">
+                <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
+                <strong>¡Aviso!</strong><%=mensaje%>
+            </div>    
+        </div>
+        <%mensaje=null%>
+    <% } %>
+    
     <div class="container">
         <p>El objetivo de esta aplicación es centralizar los instrumentos pedagógicos o actividades lúdicas que utilizan los docentes en diferentes cursos. Esto permitirá que un docente pueda consultar un instrumento ya creado para incorporarlo en sus clases o diseñar un instrumento nuevo para un temática en particular.</p>
     </div>

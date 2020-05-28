@@ -43,7 +43,7 @@
                     <%for (var i=0; i < archivosInstrumento.length; i++){ %>
                         <tr>
                             <td>
-                                <input type="hidden" id="nombreArvhivo<%=i%>" value="<%= archivosInstrumento[i].nombreArchivo%>">
+                                <input type="hidden" id="nombreArvhivo<%=i%>" value="<%=archivosInstrumento[i].nombreArchivo.replace(/ /g, "_")%>">
                                 <a href=""  target="_blank" id="rutaImagen<%=i%>"><%= archivosInstrumento[i].nombreArchivo%></a>                                                            
                             </td>
                             <td>

@@ -5,8 +5,9 @@ const ProfesorSchema = new Schema({
     correo: String,
     contrasena: String,
     nombre: String,
-    apellido: String,
-    institucion: String
+    apellido: String,    
+    institucion: String,
+    esAdmin: String
 });
 
 module.exports = mongoose.model('profesores', ProfesorSchema);

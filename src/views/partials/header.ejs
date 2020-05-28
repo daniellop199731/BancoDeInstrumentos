@@ -7,27 +7,76 @@
     <title>Banco de instrumentos</title>
     <!-- Boostrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <script type="text/javascript">
-        function fnNoHaySesion(){
-            document.getElementById('instrumento').style.display = 'none';
-            document.getElementById('categoria').style.display = 'none';
-            document.getElementById('inicioSesion').style.display = 'block';
-            document.getElementById('salirSesion').style.display = 'none';
-            document.getElementById('registrarse').style.display = 'block';
-            document.getElementById('consultar').style.display = 'none'
-        }
-
-        function fnSiHaySesion(){
-            document.getElementById('instrumento').style.display = 'block';
-            document.getElementById('categoria').style.display = 'block';
-            document.getElementById('inicioSesion').style.display = 'none';
-            document.getElementById('salirSesion').style.display = 'block';
-            document.getElementById('registrarse').style.display = 'none';
-            document.getElementById('consultar').style.display = 'block'
-        }
-    </script>
-
+    <% if (profesor != null){ 
+        var esAdmin = profesor[0].esAdmin
+    %>
+        <% if(parseInt(esAdmin) >= 1){%>
+            <script type="text/javascript">
+                function fnNoHaySesion(){
+                    document.getElementById('instrumento').style.display = 'none';
+                    document.getElementById('categoria').style.display = 'none';
+                    document.getElementById('inicioSesion').style.display = 'block';
+                    document.getElementById('salirSesion').style.display = 'none';
+                    document.getElementById('registrarse').style.display = 'block';
+                    document.getElementById('consultar').style.display = 'none'
+                    document.getElementById('acceso').style.display = 'none'
+                }
+        
+                function fnSiHaySesion(){
+                    document.getElementById('instrumento').style.display = 'block';
+                    document.getElementById('categoria').style.display = 'block';
+                    document.getElementById('inicioSesion').style.display = 'none';
+                    document.getElementById('salirSesion').style.display = 'block';
+                    document.getElementById('registrarse').style.display = 'none';
+                    document.getElementById('consultar').style.display = 'block'
+                    document.getElementById('acceso').style.display = 'block'
+                }
+            </script>
+        <% } else { %>
+            <script type="text/javascript">
+                function fnNoHaySesion(){
+                    document.getElementById('instrumento').style.display = 'none';
+                    document.getElementById('categoria').style.display = 'none';
+                    document.getElementById('inicioSesion').style.display = 'block';
+                    document.getElementById('salirSesion').style.display = 'none';
+                    document.getElementById('registrarse').style.display = 'block';
+                    document.getElementById('consultar').style.display = 'none'
+                    document.getElementById('acceso').style.display = 'none'
+                }
+        
+                function fnSiHaySesion(){
+                    document.getElementById('instrumento').style.display = 'block';
+                    document.getElementById('categoria').style.display = 'block';
+                    document.getElementById('inicioSesion').style.display = 'none';
+                    document.getElementById('salirSesion').style.display = 'block';
+                    document.getElementById('registrarse').style.display = 'none';
+                    document.getElementById('consultar').style.display = 'block' 
+                    document.getElementById('acceso').style.visibility = "hidden";               
+                }
+            </script>
+        <% } %>
+    <% } else {%>
+        <script type="text/javascript">
+            function fnNoHaySesion(){
+                document.getElementById('instrumento').style.display = 'none';
+                document.getElementById('categoria').style.display = 'none';
+                document.getElementById('inicioSesion').style.display = 'block';
+                document.getElementById('salirSesion').style.display = 'none';
+                document.getElementById('registrarse').style.display = 'block';
+                document.getElementById('consultar').style.display = 'none'
+                document.getElementById('acceso').style.display = 'none'
+            }
+    
+            function fnSiHaySesion(){
+                document.getElementById('instrumento').style.display = 'block';
+                document.getElementById('categoria').style.display = 'block';
+                document.getElementById('inicioSesion').style.display = 'none';
+                document.getElementById('salirSesion').style.display = 'block';
+                document.getElementById('registrarse').style.display = 'none';
+                document.getElementById('consultar').style.display = 'block'                
+            }
+        </script>        
+    <% } %>
 </head>
 <body>
 
@@ -35,15 +84,18 @@
         <a href="/" class="navbar-brand">Banco de instrumentos</a>
         <div class="container">
             <div class="row">
-                <div id="instrumento" class="col-md-4">
+                <div id="instrumento" class="col-md-3">
                     <a href="/nuevoInstrumento" class="navbar-brand">Instrumentos</a>
                 </div>
-                <div id="categoria" class="col-md-4">
+                <div id="categoria" class="col-md-3">
                         <a href="/nuevaCategoria" class="navbar-brand">Categorias</a>
                 </div>
-                <div id="consultar" class="col-md-4">
+                <div id="consultar" class="col-md-3">
                     <a href="/consultar" class="navbar-brand">Consultar</a>
                 </div>
+                <div id="acceso" class="col-md-3">
+                    <a href="/nuevoAcceso" class="navbar-brand">Acceso</a>
+                </div>                
             </div>
             <ul class="navbar-nav ml-auto">
                 <li id="inicioSesion" class="nav-item active">

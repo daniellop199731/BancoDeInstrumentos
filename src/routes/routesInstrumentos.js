@@ -87,12 +87,12 @@ router.post('/crearInstrumento', cargaArchivos, async (req, res) => {
     if (categoria.value == '') {
         continuar = false;
     }
-    if (proposito.length == 0) {
+    /*if (proposito.length == 0) {
         continuar = false;
     }
     if (proposito.length == 0) {
         continuar = false;
-    }
+    }*/
     if (t_Duracion.value == '') {
         continuar = false;
     }
@@ -320,7 +320,8 @@ async function obtenerArchivos(idInst) {
     console.log(idInst);
     var respuesta = ''
     for (let i = 0; i < archivosInstrumento.length; i++) {
-        var nombre = archivosInstrumento[i].nombreArchivo
+        var nombre = archivosInstrumento[i].nombreArchivo.replace(/ /g, "_")
+        console.log(nombre);
         var file = await fs.readFileSync(`src/public/archivos/${nombre}`);
         respuesta = respuesta + `${nombre}|split|data:@file/file;base64,` + file.toString('base64') + "|name|";
     }

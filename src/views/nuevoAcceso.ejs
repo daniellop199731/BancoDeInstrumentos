@@ -1,0 +1,61 @@
+<%- include('partials/header'); %>
+
+    <%if(profesor != null){%>
+        <script>
+            fnSiHaySesion();
+        </script>
+    <%}else{%>
+        <script>
+            fnNoHaySesion();
+        </script>
+    <%}%>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <h2>Nuevo Acceso</h2>  
+            <div class="card">
+                <div class="card-body">
+                    <form action="/crearAcceso" method="POST">
+                        <div class="form-group">
+                            <input type="email" name="correo" value="" placeholder="Correo electronico" class="form-control" required>
+                        </div>      
+                        <input type="submit" value="Crear codigo" class="btn btn-primary btn-block">                                                                                                                     
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <h2>Accesos</h2>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Correo</th>
+                        <th>Codigo de acceso</th>
+                        <th>eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = 0; i < accesos.length; i++) {%>
+                        <tr>
+                            <th><%=i+1%></th>
+                            <td><%=accesos[i].correo%></td>
+                            <td><%=accesos[i].codAcceso%></td>
+                            <td>                                
+                                <form action="/eliminarAcceso" method="DELETE">
+                                    <input type="hidden" name="idCod" value="<%=accesos[i]._id%>">
+                                    <input type="submit" value="Eliminar" class="btn btn-danger">
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<%- include('partials/footer'); %>    
